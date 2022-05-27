@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script> -->
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diagnosis Result</title>
+</head>
+
+<body>
+    <header>
+        <h2>Welcome to A.I. Diagnosis</h2>
+        <div class="row align-items-center">
+            <a class="col-md-auto" href="/">Home</a>
+            <a class="col-md-auto" href="">How it Works</a>
+            <a class="col-md-auto" href="">Contact Us</a>
+
+        </div>
+    </header>
+    <div class="wrapper">
+        <!-- personal info -->
+        <div class="personalInfo">
+            <div class="row">
+                <div class="col-5">
+                    <h4>Name:</h4>
+                </div>
+                <div class="col-5">
+                    <p>{{patient.firstName}} {{patient.lastName}}</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-5">
+                    <h4>Case Number:</h4>
+                </div>
+                <div class="col-5">
+                    <p>{{patient.caseNumber}}</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-5">
+                    <h4>Gender:</h4>
+                </div>
+                <div class="col-5">
+                    <p>{{patient.sex}}</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-5">
+                    <h4>Phone Number:</h4>
+                </div>
+                <div class="col-5">
+                    <p>{{patient.phone_number}}</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-5">
+                    <h4>Email:</h4>
+                </div>
+                <div class="col-5">
+                    <p>{{patient.email}}</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-5">
+                    <h4>Patient Date of Birth:</h4>
+                </div>
+                <div class="col-5">
+                    <p>{{patient.date_of_birth}}</p>
+                </div>
+            </div>
+        </div>
+        <center style="padding: 30px;">
+            <table class="hostPortalTable">
+                <thead>
+                    <tr>
+                        <th>Tongue Coat</th>
+                        <th>Left Eye</th>
+                        <th>Right Eye</th>
+                        <th>Face</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        {% if patient.tongueCoat %}
+                        <td style="padding: 20px;"><img src="{{patient.tongueCoat.url}}" alt="" style="height:200px ; width: 200px;"></td>
+                        {% endif %}
+                        <!--  -->
+                        {% if patient.leftEye %}
+                        <td style="padding: 20px;"><img src="{{patient.leftEye.url}}" alt="" style="height:200px ; width: 200px;"></td>
+                        {% endif %}
+                        <!--  -->
+                        {% if patient.rightEye %}
+                        <td style="padding: 20px;"><img src="{{patient.rightEye.url}}" alt="" style="height:200px ; width: 200px;"></td>
+                        {% endif %}
+                        <!--  -->
+                        {% if patient.face %}
+                        <td style="padding: 20px;"><img src="{{patient.face.url}}" alt="" style="height:200px ; width: 200px;"></td>
+                        {% endif %}
+                    </tr>
+                </tbody>
+            </table>
+        </center>
+        <center class="patientFileFeild">
+            {% if patient.patientFile %}
+            <!--  -->
+            {% for file in patient.patientFile.all %}
+            <p>
+                <a href="{{file.file.url}}">{{file.file}}</a> Uploaded on: {{file.created_at}}
+            </p>
+            <!--  -->
+            {% endfor %}
+            <!--  -->
+            {% endif %}
+        </center>
+        <!-- <p>patient.agreementCheck: {{patient.agreementCheck}}</p>
+        <p>patient.diagnosis: {{patient.diagnosis}}</p>
+        <p>patient.diagnosisInitial: {{patient.diagnosisInitial}}</p>
+        <p>patient.diagnosisResult: {{patient.diagnosisResult}}</p> -->
+        <center>
+            <a href="">Send your diagnosis to your email</a>
+            <br>
+            <a href="">Any question? Feel free to contact us.</a>
+        </center>
+
+        <hr>
+        <div>
+            <table class="table table-hover hostPortalTable">
+                <thead>
+                    <tr class="table-primary">
+                        <th>Organ</th>
+                        <th>(IMG)</th>
+                        <th>(Health Condition)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Lung</td>
+                        <td><img src="/media/organ_photos/lung.png" alt="" style="height:160px;width: 160px;"></td>
+                        <!--  -->
+                        {% if lung == initialLung %}
+                        <!--  -->
+                        {% if lung == False %}
+                        <td>
+                            <img src="/media/diagnosis/1000.png" style="height:120px;width: 160px;" alt="">
+                        </td>
+                        {% else %}
+                        <td>
+                            <img src="/media/diagnosis/3070.png" style="height:120px;width: 160px;" alt="">
+                        </td>
+                        {% endif %}
+                        <!--  -->
+                        {% elif lung != initialLung %}
+                        <!--  -->
+                        {% if lung == False %}
+                        <td>
+                            <img src="/media/diagnosis/6040.png" style="height:120px;width: 160px;" alt="">
+                        </td>
+                        <!--  -->
+                        {% else %}
+                        <td>
+                            <img src="/media/diagnosis/4060.png" style="height:120px;width: 160px;" alt="">
+                        </td>
+                        {% endif %}
+                        <!--  -->
+                        {% endif %}
+                    </tr>
+                    {% if patient.sex == 'Male' %}
+                    <tr>
+                        <td>Pericardium</td>
+                        <td><img src="/media/organ_photos/pericardium.webp" alt="" style="height:160px;width: 250px;"></td>
+                        {% if pericardium == initialPericardium %}
+                        <!--  -->
+                        {% if pericardium == False %}
+                        <td>
+                            <img src="/media/diagnosis/1000.png" style="height:120px;width: 160px;" alt="">
+                        </td>
+                        {% else %}
+                        <td>
+                            <img src="/media/diagnosis/3070.png" style="height:120px;width: 160px;" alt="">
+                        </td>
+                        {% endif %}
+                        <!--  -->
+                        {% elif pericardium != initialPericardium %}
+                        <!--  -->
+                        {% if pericardium == False %}
+                        <td>
+                            <img src="/media/diagnosis/6040.png" style="height:120px;width: 160px;" alt="">
+                        </td>
+                        <!--  -->
+                        {% else %}
+                        <td>
+                            <img src="/media/diagnosis/4060.png" style="height:120px;width: 160px;" alt="">
+                        </td>
+                        {% endif %}
+                        <!--  -->
+                        {% endif %}
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td>Pericardium</td>
+                        <td><img src="/media/organ_photos/pericardium.webp" alt="" style="height:160px;width: 250px;"><img src="/media/organ_photos/mammary_gland.png" alt="" style="height:160px;width: 250px;"></td>
+                        {% if pericardium == initialPericardium %}
+                        <!--  -->
+                        {% if pericardium == False %}
+                        <td>
+                            <img src="/media/diagnosis/1000.png" style="height:120px;width: 160px;" alt="">
+                        </td>
+                        {% else %}
+                        <td>
+                            <img src="/media/diagnosis/3070.png" style="height:120px;width: 160px;" alt="">
+                        </td>
+                        {% endif %}
+                        <!--  -->
+                        {% elif pericardium != initialPericardium %}
+                        <!--  -->
+                        {% if pericardium == False %}
+                        <td>
+                            <img src="/media/diagnosis/6040.png" style="height:120px;width: 160px;" alt="">
+                        </td>
+                        <!--  -->
+                        {% else %}
+                        <td>
+                            <img src="/media/diagnosis/4060.png" style="height:120px;width: 160px;" alt="">
+                        </td>
+                        {% endif %}
+                        <!--  -->
+                        {% endif %}
+                    </tr>
+                    {% endif %}
+                    <tr>
+                        <td>Heart</td>
+                        <td><img src="/media/organ_photos/heart.png" alt="" style="height:160px;width: 160px;"></td>
+
+                        {% if heart == initialHeart %}
+                        <!--  -->
+                        {% if heart == False %}
+                        <td>
+                            <img src="/media/diagnosis/1000.png" style="height:120px;width: 160px;" alt="">
+                        </td>
+                        {% else %}
+                        <td>
+                            <img src="/media/diagnosis/3070.png" style="height:120px;width: 160px;" alt="">
+                        </td>
+                        {% endif %}
+                        <!--  -->
+                        {% elif heart != initialHeart %}
+                        <!--  -->
+                        {% if heart == False %}
+                        <td>
+                            <img src="/media/diagnosis/6040.png" style="height:120px;width: 160px;" alt="">
+                        </td>
+                        <!--  -->
+                        {% else %}
+                        <td>
+                            <img src="/media/diagnosis/4060.png" style="height:120px;width: 160px;" alt="">
+                        </td>
+                        {% endif %}
+                        <!--  -->
+                        {% endif %}
+                    </tr>
+                    <tr>
+                        <td>Stomach</td>
+                        <td><img src="/media/organ_photos/stomach.png" alt="" style="height:160px;width: 160px;"></td>
+
+                        {% if stomach == initialStomach %}
+                        <!--  -->
+                        {% if stomach == False %}
+                        <td>
+                            <img src="/media/diagnosis/1000.png" style="height:120px;width: 160px;" alt="">
+                        </td>
+                        {% else %}
+                        <td>
+                            <img src="/media/diagnosis/3070.png" style="height:120px;width: 160px;" alt="">
+                        </td>
+                        {% endif %}
+                        <!--  -->
+                        {% elif stomach != initialStomach %}
+                        <!--  -->
+                        {% if stomach == False %}
+                        <td>
+                            <img src="/media/diagnosis/6040.png" style="height:120px;width: 160px;" alt="">
+                        </td>
+                        <!--  -->
+                        {% else %}
+                        <td>
+                            <img src="/media/diagnosis/4060.png" style="height:120px;width: 160px;" alt="">
+                        </td>
+                        {% endif %}
+                        <!--  -->
+                        {% endif %}
+                    </tr>
+                    <tr>
+                        <td>Gallbladder</td>
+                        <td><img src="/media/organ_photos/gallbladder.png" alt="" style="height:160px;width: 160px;"></td>
+
+                        {% if gallbladder == initialGallbladder %}
+                        <!--  -->
+                        {% if gallbladder == False %}
+                        <td>
+                            <img src="/media/diagnosis/1000.png" style="height:120px;width: 160px;" alt="">
+                        </td>
+                        {% else %}
+                        <td>
+                            <img src="/media/diagnosis/3070.png" style="height:120px;width: 160px;" alt="">
+                        </td>
+                        {% endif %}
+                        <!--  -->
+                        {% elif gallbladder != initialGallbladder %}
+                        <!--  -->
+                        {% if gallbladder == False %}
+                        <td>
+                            <img src="/media/diagnosis/6040.png" style="height:120px;width: 160px;" alt="">
+                        </td>
+                        <!--  -->
+                        {% else %}
+                        <td>
+                            <img src="/media/diagnosis/4060.png" style="height:120px;width: 160px;" alt="">
+                        </td>
+                        {% endif %}
+                        <!--  -->
+                        {% endif %}
+                    </tr>
+                    <tr>
+                        <td>Urinary Bladder</td>
+                        <td><img src="/media/organ_photos/Urinary_Bladder.png" alt="" style="height:160px;width: 160px;"></td>
+
+                        {% if urinaryBladder == initialUrinaryBladder %}
+                        <!--  -->
+                        {% if urinaryBladder == False %}
+                        <td>
+                            <img src="/media/diagnosis/1000.png" style="height:120px;width: 160px;" alt="">
+                        </td>
+                        {% else %}
+                        <td>
+                            <img src="/media/diagnosis/3070.png" style="height:120px;width: 160px;" alt="">
+                        </td>
+                        {% endif %}
+                        <!--  -->
+                        {% elif urinaryBladder != initialUrinaryBladder %}
+                        <!--  -->
+                        {% if urinaryBladder == False %}
+                        <td>
+                            <img src="/media/diagnosis/6040.png" style="height:120px;width: 160px;" alt="">
+                        </td>
+                        <!--  -->
+                        {% else %}
+                        <td>
+                            <img src="/media/diagnosis/4060.png" style="height:120px;width: 160px;" alt="">
+                        </td>
+                        {% endif %}
+                        <!--  -->
+                        {% endif %}
+                    </tr>
+                    <tr>
+                        <td>Spleen</td>
+                        <td><img src="/media/organ_photos/Spleen1.png" alt="" style="height:160px;width: 300px;"></td>
+
+                        {% if spleen == initialSpleen %}
+                        <!--  -->
+                        {% if spleen == False %}
+                        <td>
+                            <img src="/media/diagnosis/1000.png" style="height:120px;width: 160px;" alt="">
+                        </td>
+                        {% else %}
+                        <td>
+                            <img src="/media/diagnosis/3070.png" style="height:120px;width: 160px;" alt="">
+                        </td>
+                        {% endif %}
+                        <!--  -->
+                        {% elif spleen != initialSpleen %}
+                        <!--  -->
+                        {% if spleen == False %}
+                        <td>
+                            <img src="/media/diagnosis/6040.png" style="height:120px;width: 160px;" alt="">
+                        </td>
+                        <!--  -->
+                        {% else %}
+                        <td>
+                            <img src="/media/diagnosis/4060.png" style="height:120px;width: 160px;" alt="">
+                        </td>
+                        {% endif %}
+                        <!--  -->
+                        {% endif %}
+                    </tr>
+                    <tr>
+                        <td>Liver</td>
+                        <td><img src="/media/organ_photos/liver.png" alt="" style="height:160px;width: 160px;"></td>
+
+                        {% if liver == initialLiver %}
+                        <!--  -->
+                        {% if liver == False %}
+                        <td>
+                            <img src="/media/diagnosis/1000.png" style="height:120px;width: 160px;" alt="">
+                        </td>
+                        {% else %}
+                        <td>
+                            <img src="/media/diagnosis/3070.png" style="height:120px;width: 160px;" alt="">
+                        </td>
+                        {% endif %}
+                        <!--  -->
+                        {% elif liver != initialLiver %}
+                        <!--  -->
+                        {% if liver == False %}
+                        <td>
+                            <img src="/media/diagnosis/6040.png" style="height:120px;width: 160px;" alt="">
+                        </td>
+                        <!--  -->
+                        {% else %}
+                        <td>
+                            <img src="/media/diagnosis/4060.png" style="height:120px;width: 160px;" alt="">
+                        </td>
+                        {% endif %}
+                        <!--  -->
+                        {% endif %}
+                    </tr>
+                    <tr>
+                        <td>Kidney</td>
+                        <td><img src="/media/organ_photos/Kidney.png" alt="" style="height:160px;width: 230px;"></td>
+
+                        {% if kidney == initialKidney %}
+                        <!--  -->
+                        {% if kidney == False %}
+                        <td>
+                            <img src="/media/diagnosis/1000.png" style="height:120px;width: 160px;" alt="">
+                        </td>
+                        {% else %}
+                        <td>
+                            <img src="/media/diagnosis/3070.png" style="height:120px;width: 160px;" alt="">
+                        </td>
+                        {% endif %}
+                        <!--  -->
+                        {% elif kidney != initialKidney %}
+                        <!--  -->
+                        {% if kidney == False %}
+                        <td>
+                            <img src="/media/diagnosis/6040.png" style="height:120px;width: 160px;" alt="">
+                        </td>
+                        <!--  -->
+                        {% else %}
+                        <td>
+                            <img src="/media/diagnosis/4060.png" style="height:120px;width: 160px;" alt="">
+                        </td>
+                        {% endif %}
+                        <!--  -->
+                        {% endif %}
+                    </tr>
+                    <tr>
+                        <td>Large Intestine</td>
+                        <td><img src="/media/organ_photos/Large_intestine.png" alt="" style="height:160px;width: 160px;"></td>
+
+                        {% if large_intestine == initialLarge_intestine %}
+                        <!--  -->
+                        {% if large_intestine == False %}
+                        <td>
+                            <img src="/media/diagnosis/1000.png" style="height:120px;width: 160px;" alt="">
+                        </td>
+                        {% else %}
+                        <td>
+                            <img src="/media/diagnosis/3070.png" style="height:120px;width: 160px;" alt="">
+                        </td>
+                        {% endif %}
+                        <!--  -->
+                        {% elif large_intestine != initialLarge_intestine %}
+                        <!--  -->
+                        {% if large_intestine == False %}
+                        <td>
+                            <img src="/media/diagnosis/6040.png" style="height:120px;width: 160px;" alt="">
+                        </td>
+                        <!--  -->
+                        {% else %}
+                        <td>
+                            <img src="/media/diagnosis/4060.png" style="height:120px;width: 160px;" alt="">
+                        </td>
+                        {% endif %}
+                        <!--  -->
+                        {% endif %}
+                    </tr>
+                    {% if patient.sex == 'Male' %}
+                    <tr>
+                        <td>San Jiao</td>
+                        <td><img src="/media/organ_photos/san_jiao_male.png" alt="" style="height:160px;width: 160px;"></td>
+
+                        {% if san_jiao == initialSan_jiao %}
+                        <!--  -->
+                        {% if san_jiao == False %}
+                        <td>
+                            <img src="/media/diagnosis/1000.png" style="height:120px;width: 160px;" alt="">
+                        </td>
+                        {% else %}
+                        <td>
+                            <img src="/media/diagnosis/3070.png" style="height:120px;width: 160px;" alt="">
+                        </td>
+                        {% endif %}
+                        <!--  -->
+                        {% elif san_jiao != initialSan_jiao %}
+                        <!--  -->
+                        {% if san_jiao == False %}
+                        <td>
+                            <img src="/media/diagnosis/6040.png" style="height:120px;width: 160px;" alt="">
+                        </td>
+                        <!--  -->
+                        {% else %}
+                        <td>
+                            <img src="/media/diagnosis/4060.png" style="height:120px;width: 160px;" alt="">
+                        </td>
+                        {% endif %}
+                        <!--  -->
+                        {% endif %}
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td>San Jiao</td>
+                        <td><img src="/media/organ_photos/san_jiao_female.png" alt="" style="height:160px;width: 210px;"></td>
+
+                        {% if san_jiao == initialSan_jiao %}
+                        <!--  -->
+                        {% if san_jiao == False %}
+                        <td>
+                            <img src="/media/diagnosis/1000.png" style="height:120px;width: 160px;" alt="">
+                        </td>
+                        {% else %}
+                        <td>
+                            <img src="/media/diagnosis/3070.png" style="height:120px;width: 160px;" alt="">
+                        </td>
+                        {% endif %}
+                        <!--  -->
+                        {% elif san_jiao != initialSan_jiao %}
+                        <!--  -->
+                        {% if san_jiao == False %}
+                        <td>
+                            <img src="/media/diagnosis/6040.png" style="height:120px;width: 160px;" alt="">
+                        </td>
+                        <!--  -->
+                        {% else %}
+                        <td>
+                            <img src="/media/diagnosis/4060.png" style="height:120px;width: 160px;" alt="">
+                        </td>
+                        {% endif %}
+                        <!--  -->
+                        {% endif %}
+                    </tr>
+                    {% endif %}
+                    <tr>
+                        <td>Small Intestine</td>
+                        <td><img src="/media/organ_photos/small_intestine.png" alt="" style="height:160px;width: 160px;"></td>
+
+                        {% if small_intestine == initialSmall_intestine %}
+                        <!--  -->
+                        {% if small_intestine == False %}
+                        <td>
+                            <img src="/media/diagnosis/1000.png" style="height:120px;width: 160px;" alt="">
+                        </td>
+                        {% else %}
+                        <td>
+                            <img src="/media/diagnosis/3070.png" style="height:120px;width: 160px;" alt="">
+                        </td>
+                        {% endif %}
+                        <!--  -->
+                        {% elif small_intestine != initialSmall_intestine %}
+                        <!--  -->
+                        {% if small_intestine == False %}
+                        <td>
+                            <img src="/media/diagnosis/6040.png" style="height:120px;width: 160px;" alt="">
+                        </td>
+                        <!--  -->
+                        {% else %}
+                        <td>
+                            <img src="/media/diagnosis/4060.png" style="height:120px;width: 160px;" alt="">
+                        </td>
+                        {% endif %}
+                        <!--  -->
+                        {% endif %}
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <center>
+            <a class="btn btn-primary btn-lg" href="/">Back To Home</a>
+        </center>
+    </div>
+</body>
+<footer>
+    <center>
+        <h2>Footer</h2>
+    </center>
+</footer>
+
+</html>

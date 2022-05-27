@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--  -->
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
+    <title>Describe Your Sympton</title>
+    <script type="text/javascript">
+        function preventBack() {
+            window.history.forward();
+        }
+        setTimeout("preventBack()", 0); 
+        window.onunload = function() {
+            null
+        };
+    </script>
+    <script>
+        $(document).ready(function() {
+            // $(".lastVisit input[type='radio']").change(function() {
+            //     if ($(this).val() == "Worse") {
+            //         $("#lastText").show();
+            //     } else {
+            //         $("#lastText").hide();
+            //     }
+            // })
+
+            // $(".newComplaints input[type='radio']").change(function() {
+            //     if ($(this).val() == "Yes") {
+            //         $("#newText").show();
+            //     } else {
+            //         $("#newText").hide();
+            //     }
+            // })
+
+            $("#sweat").change(function() {
+                if ($(this).val() == "Other Sweat") {
+                    $("#otherSweat").show();
+                } else {
+                    $("#otherSweat").hide();
+                }
+            })
+
+            $("#appetite").change(function() {
+                if ($(this).val() == "Other Appetite") {
+                    $("#otherAppetite").show();
+                } else {
+                    $("#otherAppetite").hide();
+                }
+            })
+
+            $("#sleep").change(function() {
+                if ($(this).val() == "Other Sleep") {
+                    $("#otherSleep").show();
+                } else {
+                    $("#otherSleep").hide();
+                }
+            })
+
+            $("#tinnitus").change(function() {
+                if ($(this).val() == "Other Tinnitus") {
+                    $("#otherTinnitus").show();
+                } else {
+                    $("#otherTinnitus").hide();
+                }
+            })
+
+            $("#mouth").change(function() {
+                if ($(this).val() == "Other Mouth") {
+                    $("#otherMouth").show();
+                } else {
+                    $("#otherMouth").hide();
+                }
+            })
+
+            $("#digestion").change(function() {
+                if ($(this).val() == "Other Digestion") {
+                    $("#otherDigestion").show();
+                } else {
+                    $("#otherDigestion").hide();
+                }
+            })
+
+            $("#stool").change(function() {
+                if ($(this).val() == "Other Stool") {
+                    $("#otherStool").show();
+                } else {
+                    $("#otherStool").hide();
+                }
+            })
+
+            $("#eyes").change(function() {
+                if ($(this).val() == "Other Eyes") {
+                    $("#otherEyes").show();
+                } else {
+                    $("#otherEyes").hide();
+                }
+            })
+
+            $("#teeth").change(function() {
+                if ($(this).val() == "Other Teeth") {
+                    $("#otherTeeth").show();
+                } else {
+                    $("#otherTeeth").hide();
+                }
+            })
+
+            $("#sexualActivities").change(function() {
+                if ($(this).val() == "Other SexualActivities") {
+                    $("#otherSexualActivities").show();
+                } else {
+                    $("#otherSexualActivities").hide();
+                }
+            })
+
+            $("#swelling").change(function() {
+                if ($(this).val() == "Other Swelling") {
+                    $("#otherSwelling").show();
+                } else {
+                    $("#otherSwelling").hide();
+                }
+            })
+
+            $("#thirst").change(function() {
+                if ($(this).val() == "Other Thirst") {
+                    $("#otherThirst").show();
+                } else {
+                    $("#otherThirst").hide();
+                }
+            })
+
+            $("#urine").change(function() {
+                if ($(this).val() == "Other Urine") {
+                    $("#otherUrine").show();
+                } else {
+                    $("#otherUrine").hide();
+                }
+            })
+
+            $("#nose").change(function() {
+                if ($(this).val() == "Other Nose") {
+                    $("#otherNose").show();
+                } else {
+                    $("#otherNose").hide();
+                }
+            })
+
+            $("#throat").change(function() {
+                if ($(this).val() == "Other Throat") {
+                    $("#otherThroat").show();
+                } else {
+                    $("#otherThroat").hide();
+                }
+            })
+        });
+    </script>
+</head>
+
+<body>
+    <header>
+        <h2>Welcome to A.I. Diagnosis</h2>
+        <div class="row align-items-center">
+            <a class="col-md-auto" href="/">Home</a>
+            <a class="col-md-auto" href="">How it Works</a>
+            <a class="col-md-auto" href="">Contact Us</a>
+        </div>
+    </header>
+    <div class="wrapper">
+        <center>
+            <h2>Patient Form</h2>
+            <p>Date of Visit: {{today_date}}</p>
+            <h3>Hello {{patient.firstName}} {{patient.lastName}}</h3>
+        </center>
+        <!-- {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+            <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %} -->
+        <form action="/newPatient/{{patient.id}}/newform" method='POST' class="row">
+            {% csrf_token %}
+            <div class="mb-3 form2-1">
+                <h3>How we can help you today?</h3>
+                <div class="form-floating">
+                    <textarea class="form-control" name="sympton" id="sympton" style="height: 100px" required></textarea>
+                    <label for="sympton">Briefily Describe your Sympton (Required)</label>
+                </div>
+                <!-- <div class="mb-3 lastVisit">
+                    <p>How was the last treatment?</p>
+                    <input type="radio" class="form-check-input" id="same" name="lastVisit" value="Same">
+                    <label for="same" class="form-check-label">Same</label>
+                    <input type="radio" class="form-check-input" name="lastVisit" id="better" checked="checked" value="Better">
+                    <label for="better" class="form-check-label">Better</label>
+                    <input type="radio" class="form-check-input" name="lastVisit" id="worse" value="Worse">
+                    <label for="worse" class="form-check-label">Worse</label>
+                    <br>
+                    <textarea class="form-control" style="display:none" placeholder="Please Explain:" id="lastText" name="lastVisitComment" style="height: 100px"></textarea>
+                </div>
+                <div class="mb-3 newComplaints">
+                    <label for="newComplaints">New Complaints?</label>
+                    <input type="radio" class="form-check-input" name="newComplaints" id="no" checked="checked" value="No">
+                    <label for="no" class="form-check-label">No</label>
+                    <input type="radio" class="form-check-input" name="newComplaints" id="yes" value="Yes">
+                    <label for="yes" class="form-check-label">Yes</label>
+                    <br>
+                    <textarea class="form-control" style="display:none" name="newComplaintsComment" placeholder="Please Explain:" id="newText" style="height: 100px"></textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="changeMedication">Any Changes of Medication?</label>
+                    <select class="form-select" name="changeMedication" id="changeMedication">
+                        <option value="No">No</option>
+                        <option value="Yes">Yes</option>
+                    </select>
+                    <label for="changeLastVisit">Any Changes from the Last Visit?</label>
+                    <select class="form-select" name="changeLastVisit" id="changeLastVisit">
+                        <option value="No">No</option>
+                        <option value="Yes">Yes</option>
+                    </select>
+                </div> -->
+                <div class="form2 row form2-1">
+                    <h3>Some more details about you </h3>
+                    <p>Please select the <span>Best option</span> to describe yourself. If options are not applicable, select other and explain it as much as possible.</p>
+                    <div class="col-md-3 form2-2">
+                        <label for="sweat">Sweat:</label>
+                        <select class="form-select" name="sweat" id="sweat">
+                            <option value="wnl" selected>Within Normal Limit</option>
+                            <option value="night sweat">Night Sweat</option>
+                            <option value="Other Sweat">Other</option>
+                        </select>
+                        <textarea class="form-control" style="display:none" name="sweatOther" placeholder="Other:" id="otherSweat" style="height: 100px"></textarea>
+                    </div>
+
+                    <div class="col-md-3 form2-2">
+                        <label for="appetite">Appetite:</label>
+                        <select class="form-select" name="appetite" id="appetite">
+                            <option value="wnl" selected>Within Normal Limit</option>
+                            <option value="good">Good</option>
+                            <option value="poor">Poor</option>
+                            <option value="Other Appetite">Other</option>
+                        </select>
+                        <textarea class="form-control" style="display:none" name="appetiteOther" placeholder="Other:" id="otherAppetite" style="height: 100px"></textarea>
+                    </div>
+
+                    <div class="col-md-3 form2-2">
+                        <label for="sleep">Sleep:</label>
+                        <select class="form-select" name="sleep" id="sleep">
+                            <option value="wnl" selected>Within Normal Limit</option>
+                            <option value="poor">Poor</option>
+                            <option value="Other Sleep">Other</option>
+                        </select>
+                        <textarea class="form-control" style="display:none" name="sleepOther" placeholder="Other:" id="otherSleep" style="height: 100px"></textarea>
+                    </div>
+
+                    <div class="col-md-3 form2-2">
+                        <label for="tinnitus">Tinnitus:</label>
+                        <select class="form-select" name="tinnitus" id="tinnitus">
+                            <option value="no" selected>No</option>
+                            <option value="yes" >Yes</option>
+                            <option value="Other Tinnitus">Other</option>
+                        </select>
+                        <textarea class="form-control" style="display:none" name="tinnitusOther" placeholder="Other:" id="otherTinnitus" style="height: 100px"></textarea>
+                    </div>
+
+                    <div class="col-md-3 form2-2">
+                        <label for="mouth">Mouth:</label>
+                        <select class="form-select" name="mouth" id="mouth">
+                            <option value="wnl" selected>Within Normal Limit</option>
+                            <option value="Other Mouth">Other</option>
+                        </select>
+                        <textarea class="form-control" style="display:none" name="mouthOther" placeholder="Other:" id="otherMouth" style="height: 100px"></textarea>
+                    </div>
+
+                    <div class="col-md-3 form2-2">
+                        <label for="digestion">Digestion:</label>
+                        <select class="form-select" name="digestion" id="digestion">
+                            <option value="wnl" selected>Within Normal Limit</option>
+                            <option value="poor">Poor</option>
+                            <option value="Other Digestion">Other</option>
+                        </select>
+                        <textarea class="form-control" style="display:none" name="digestionOther" placeholder="Other:" id="otherDigestion" style="height: 100px"></textarea>
+                    </div>
+
+                    <div class="col-md-3 form2-2">
+                        <label for="stool">Stool:</label>
+                        <select class="form-select" name="stool" id="stool">
+                            <option value="wnl" selected>Within Normal Limit</option>
+                            <option value="Other Stool">Other</option>
+                        </select>
+                        <textarea class="form-control" style="display:none" name="stoolOther" placeholder="Other:" id="otherStool" style="height: 100px"></textarea>
+                    </div>
+
+                    <div class="col-md-3 form2-2">
+                        <label for="eyes">Eyes:</label>
+                        <select class="form-select" name="eyes" id="eyes">
+                            <option value="wnl" selected>Within Normal Limit</option>
+                            <option value="Other Eyes">Other</option>
+                        </select>
+                        <textarea class="form-control" style="display:none" name="eyesOther" placeholder="Other:" id="otherEyes" style="height: 100px"></textarea>
+                    </div>
+
+                    <div class="col-md-3 form2-2">
+                        <label for="teeth">Teeth:</label>
+                        <select class="form-select" name="teeth" id="teeth">
+                            <option value="wnl" selected>Within Normal Limit</option>
+                            <option value="Other Teeth">Other</option>
+                        </select>
+                        <textarea class="form-control" style="display:none" name="teethOther" placeholder="Other:" id="otherTeeth" style="height: 100px"></textarea>
+                    </div>
+
+                    <div class="col-md-3 form2-2">
+                        <label for="sexualActivities">Sexual Activities:</label>
+                        <select class="form-select" name="sexualActivities" id="sexualActivities">
+                            <option value="wnl" selected>Within Normal Limit</option>
+                            <option value="Other SexualActivities">Other</option>
+                        </select>
+                        <textarea class="form-control" style="display:none" name="sexualActivitiesOther" placeholder="Other:" id="otherSexualActivities" style="height: 100px"></textarea>
+                    </div>
+                    <div class="col-md-3 form2-2">
+                        <label for="swelling">Swelling:</label>
+                        <select class="form-select" name="swelling" id="swelling">
+                            <option value="no" selected>No</option>
+                            <option value="Other Swelling">Other</option>
+                        </select>
+                        <textarea class="form-control" style="display:none" name="swellingOther" placeholder="Other:" id="otherSwelling" style="height: 100px"></textarea>
+                    </div>
+
+                    <div class="col-md-3 form2-2">
+                        <label for="thirst">Thirst:</label>
+                        <select class="form-select" name="thirst" id="thirst">
+                            <option value="wnl" selected>Within Normal Limit</option>
+                            <option value="Other Thirst">Other</option>
+                        </select>
+                        <textarea class="form-control" style="display:none" name="thirstOther" placeholder="Other:" id="otherThirst" style="height: 100px"></textarea>
+                    </div>
+
+                    <div class="col-md-3 form2-2">
+                        <label for="urine">Urine:</label>
+                        <select class="form-select" name="urine" id="urine">
+                            <option value="wnl" selected>Within Normal Limit</option>
+                            <option value="Other Urine">Other</option>
+                        </select>
+                        <textarea class="form-control" style="display:none" name="urineOther" placeholder="Other:" id="otherUrine" style="height: 100px"></textarea>
+                    </div>
+
+                    <div class="col-md-3 form2-2">
+                        <label for="nose">Nose:</label>
+                        <select class="form-select" name="nose" id="nose">
+                        <option value="wnl" selected>Within Normal Limit</option>
+                        <option value="Other Nose">Other</option>
+                    </select>
+                        <textarea class="form-control" style="display:none" name="noseOther" placeholder="Other:" id="otherNose" style="height: 100px"></textarea>
+                    </div>
+
+                    <div class="col-md-3 form2-2">
+                        <label for="throat">Throat:</label>
+                        <select class="form-select" name="throat" id="throat">
+                            <option value="wnl" selected >Within Normal Limit</option>
+                            <option value="Other Throat">Other</option>
+                        </select>
+                        <textarea class="form-control" style="display:none" name="throatOther" placeholder="Other:" id="otherThroat" style="height: 100px"></textarea>
+                    </div>
+
+
+                </div>
+            </div>
+            <div class="mb-3">
+                <h3>History of allergies: (Optional)</h3>
+                <textarea class="form-control" name="allergies" placeholder="Enter your allergies here" id="allergies" style="height: 100px"></textarea>
+            </div>
+            <div class="form2btn">
+                <button class="btn btn-primary align-self-center">Next Step</button>
+            </div>
+
+        </form>
+    </div>
+</body>
+<footer>
+    <center>
+        <h2>Footer</h2>
+    </center>
+</footer>
+
+</html>

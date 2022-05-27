@@ -1,0 +1,113 @@
+<!-- not useable -->
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
+    <title>Diagnosis</title>
+</head>
+
+<body>
+    <!-- Header -->
+    <h4>Hi {{patient.firstName}}</h4>
+    <a href="">Send your diagnosis to your email</a>
+    <a href="">Any question? Feel free to contact us.</a>
+    <a href="/">Go back</a>
+    <!--  -->
+    {% if patient.agreementCheck == True %}
+    <div>
+        {% if patient.diagnosisResult %}
+        <a href="/patient/{{patient.id}}/seeResult/page">See result</a>
+        <!-- Line -->
+        {% else %}
+        <div id="noDia" style="display:block">
+            <h3>Welcome back</h3>
+            <h4>Ready to start Diagnosis?</h4>
+            <h4>Please follow the instruction below</h4>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Repudiandae ea assumenda quibusdam quas. Dolores, neque, dolore fugiat tenetur omnis voluptate doloremque asperiores enim sapiente doloribus suscipit dignissimos iure architecto eaque!</p>
+        </div>
+        <div>
+            <div class="" style="background-color: rgba(232, 232, 232, 0.735);">
+                <div id="progressBar" class="progress-bar progress-bar-striped progress-bar-animated" style="height:30px;width:0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+                    <p id="progress">0%</p>
+                </div>
+            </div>
+            <button id="diaButton" onclick="move()">Start Diagnosis</button>
+            <div id="diaMessage" style="display: none;">
+                <strong>Loading...</strong>
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <h4>Your diagnosis is in progressing</h4>
+            </div>
+            <strong id="diaComplete" style="display: none;">Complete!</strong>
+        </div>
+        <script>
+            function move() {
+                var elem = document.getElementById("progressBar");
+                var width = 0;
+                var id = setInterval(frame, 50);
+                var showForm = document.getElementById("diaForm");
+
+                function frame() {
+                    if (width >= 100) {
+                        clearInterval(id);
+                        document.getElementById("show-result").style.display = "block";
+                        document.getElementById("noDia").style.display = "none";
+                        document.getElementById("diaMessage").style.display = "none";
+                        document.getElementById("diaComplete").style.display = "block";
+                        // set page to auto redirect to new page
+                        setTimeout(function() {
+                            showForm.submit();
+                        }, 5000);
+                    } else {
+                        width++;
+                        elem.style.width = width + '%';
+                        document.getElementById("progress").innerHTML = width * 1 + '%';
+                        document.getElementById("diaButton").style.display = "none";
+                        document.getElementById("diaMessage").style.display = "block";
+                    }
+                }
+            }
+        </script>
+        <div id="show-result" style="display:none">
+            <h4>Your diagnosis result is Completed! </h4>
+            <h4>Loading your result...Please wait</h4>
+            <h5>Page not reload?
+                <a href="/patient/{{patient.id}}/seeResult/page">click here to view your result</a>
+            </h5>
+
+            <form id="diaForm" action="/patient/{{patient.id}}/seeResult" method="POST">
+                {% csrf_token %}
+                <button style="display: none;">See Result</button>
+            </form>
+        </div>
+        {% endif %}
+    </div>
+    {% else %}
+    <div>
+        <h5>Before you start A.I.Diagnosis</h5>
+        <h5>Please carefully review the instruction and terms agreements</h5>
+        <div>
+            <form action="/agreementCheck/{{patient.id}}" method="POST">
+                {% csrf_token %}
+                <h4>Instruction</h4>
+                <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Fugit impedit cum dicta commodi laboriosam libero quos quidem culpa harum possimus, nemo nisi eaque quas, minus rem a placeat tenetur odio.</p>
+                <input type="checkbox" name="agreementCheck" id="agreementCheck" value="T" onchange="document.getElementById('submit').disabled = !this.checked;">
+                <label for="agreementCheck">By checking this ...</label>
+                <button type="submit" class="btn btn-primary" id="submit" disabled>Submit</button>
+            </form>
+        </div>
+    </div>
+    {% endif %}
+</body>
+
+</html>

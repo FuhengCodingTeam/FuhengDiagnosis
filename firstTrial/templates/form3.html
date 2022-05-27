@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Your Document</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <!-- <script type="text/javascript">
+        function preventBack() {
+            window.history.forward();
+        }
+        setTimeout("preventBack()", 0); 
+        window.onunload = function() {
+            null
+        };
+    </script> -->
+</head>
+
+<body>
+    <header>
+        <h2>Welcome to A.I. Diagnosis</h2>
+        <div class="row align-items-center">
+            <a class="col-md-auto" href="/">Home</a>
+            <a class="col-md-auto" href="">How it Works</a>
+            <a class="col-md-auto" href="">Contact Us</a>
+        </div>
+    </header>
+    <div class="wrapper">
+        <center>
+            <h2>Patient Form</h2>
+            <p>Date of Visit: {{today_date}}</p>
+            <h3>Hello {{patient.firstName}} {{patient.lastName}}</h3>
+            <p>To Continue, upload required Image for Diagnosis</p>
+            <h4>Upload</h4>
+        </center>
+        <div class="form2-1">
+            <center>
+                <div class="upload">
+                    {% if patient.tongueCoat == '0' %}
+                    <div class="upload-1">
+                        <form action="/newPatient/{{patient.id}}/tongue" method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <label for="tongueCoat"><h4 class="upload-1">Upload your Tongue Coat here</h4></label>
+                            <img src="/media/organ_photos/tongueCoat1.webp" alt="" style="height: 200px; width: 200px;">
+                            <img src="/media/organ_photos/blankphoto.png" alt="" style="height: 200px; width: 200px;">
+                            <input class="form-control form-control-lg upload-1" type="file" name="uploadImg" accept="image/png, image/jpeg" required/>
+                            <button class="btn btn-info">Upload</button>
+                        </form>
+                    </div>
+                    {% else %}
+                    <div class="upload-1">
+                        <h3 class="success">Upload Success</h3>
+                        <!-- <p>{{patient.tongueCoat}}</p> -->
+                        <img class="upload-1" src="/media/organ_photos/tongueCoat1.webp" alt="" style="height: 200px; width: 200px;">
+                        <img class="upload-1" src="{{patient.tongueCoat.url}}" alt="" style="height: 200px; width: 200px;">
+                        <button class="btn btn-info" id="showTongue" style="display: block;" onclick="displayTongueFunction()">ReUpload?</button>
+                        <script>
+                            function displayTongueFunction() {
+                                document.getElementById("tongue").style.display = "block";
+                                document.getElementById("showTongue").style.display = "none";
+                            }
+                        </script>
+                        <div id="tongue" style="display: none;" class="upload-1">
+                            <form action="/newPatient/{{patient.id}}/tongue" method="POST" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <input class="form-control form-control-lg upload-1" type="file" id="reupload" name="uploadImg" accept="image/png, image/jpeg">
+                                <button class="btn btn-info">ReUpload</button>
+                            </form>
+                            <br>
+                            <button onclick=cancelTongue() class="btn btn-danger">Cancel</button>
+                            <script>
+                                function cancelTongue() {
+                                    document.getElementById("tongue").style.display = "none";
+                                    document.getElementById("showTongue").style.display = "block";
+                                }
+                            </script>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="upload">
+                    {% if patient.leftEye == '0' %}
+                    <div class="upload-1">
+                        <form action="/newPatient/{{patient.id}}/leftEye" method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <label for="leftEye"><h4 class="upload-1">Upload your Left Eye here</h4></label>
+                            <img class="upload-1" src="/media/organ_photos/left_eye.jpg" alt="" style="height: 200px; width: 200px;">
+                            <img class="upload-1" src="/media/organ_photos/blankphoto.png" alt="" style="height: 200px; width: 200px;">
+                            <input class="form-control form-control-lg upload-1" type="file" name="uploadImg" accept="image/png, image/jpeg" required>
+                            <button class="btn btn-info">Upload</button>
+                        </form>
+                    </div>
+                    {% else %}
+                    <div class="upload-1">
+                        <h3 class="success">Upload Success</h3>
+                        <!-- <p>{{patient.leftEye}}</p> -->
+                        <img class="upload-1" src="/media/organ_photos/left_eye.jpg" alt="" style="height: 200px; width: 200px;">
+                        <img class="upload-1" src="{{patient.leftEye.url}}" alt="" style="height: 200px; width: 200px;">
+                        <button class="btn btn-info" id="showLeftEye" style="display: block;" onclick="displayLeftEyeFunction()">ReUpload?</button>
+                        <script>
+                            function displayLeftEyeFunction() {
+                                document.getElementById("leftEye").style.display = "block";
+                                document.getElementById("showLeftEye").style.display = "none";
+                            }
+                        </script>
+                        <div id="leftEye" style="display:none" class="upload-1">
+                            <form action="/newPatient/{{patient.id}}/leftEye" method="POST" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <input class="form-control form-control-lg upload-1" type="file" id="reupload" name="uploadImg" accept="image/png, image/jpeg">
+                                <button class="btn btn-info">ReUpload</button>
+                            </form>
+                            <br>
+                            <button onclick=cancelLEye() class="btn btn-danger">Cancel</button>
+                            <script>
+                                function cancelLEye() {
+                                    document.getElementById("leftEye").style.display = "none";
+                                    document.getElementById("showLeftEye").style.display = "block";
+                                }
+                            </script>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="upload">
+                    {% if patient.rightEye == '0' %}
+                    <div class="upload-1">
+                        <form action="/newPatient/{{patient.id}}/rightEye" method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <label for="rightEye"><h4 class="upload-1">Upload your Right Eye here</h4></label>
+                            <img class="upload-1" src="/media/organ_photos/right_eye.jpg" alt="" style="height: 200px; width: 200px;">
+                            <img class="upload-1" src="/media/organ_photos/blankphoto.png" alt="" style="height: 200px; width: 200px;">
+                            <input class="form-control form-control-lg upload-1" type="file" name="uploadImg" accept="image/png, image/jpeg" required>
+                            <button class="btn btn-info">Upload</button>
+                        </form>
+                    </div>
+                    {% else %}
+                    <div class="upload-1">
+                        <h3 class="success">Upload Success</h3>
+                        <!-- <p>{{patient.rightEye}}</p> -->
+                        <img class="upload-1" src="/media/organ_photos/right_eye.jpg" alt="" style="height: 200px; width: 200px;">
+                        <img class="upload-1" src="{{patient.rightEye.url}}" alt="" style="height: 200px; width: 200px;">
+                        <button class="btn btn-info" id="showRightEye" style="display: block;" onclick="displayRigtEyeFunction()">ReUpload?</button>
+                        <script>
+                            function displayRigtEyeFunction() {
+                                document.getElementById("rightEyeUpload").style.display = "block";
+                                document.getElementById("showRightEye").style.display = "none";
+                            }
+                        </script>
+                        <div id="rightEyeUpload" style="display: none;" class="upload-1">
+                            <form action="/newPatient/{{patient.id}}/rightEye" method="POST" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <input class="form-control form-control-lg upload-1" type="file" id="reupload" name="uploadImg" accept="image/png, image/jpeg" required>
+                                <button class="btn btn-info">ReUpload</button>
+                            </form>
+                            <br>
+                            <button onclick=cancelREye() class="btn btn-danger">Cancel</button>
+                            <script>
+                                function cancelREye() {
+                                    document.getElementById("rightEyeUpload").style.display = "none";
+                                    document.getElementById("showRightEye").style.display = "block";
+                                }
+                            </script>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="upload">
+                    {% if patient.face == '0' %}
+                    <div class="upload-1">
+                        <form action="/newPatient/{{patient.id}}/face" method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <label for="face"><h4 class="upload-1">Upload your Face here</h4></label>
+                            <img class="upload-1" src="/media/organ_photos/face.png" alt="" style="height: 200px; width: 200px;">
+                            <img class="upload-1" src="/media/organ_photos/blankphoto.png" alt="" style="height: 200px; width: 200px;">
+                            <input class="form-control form-control-lg upload-1" type="file" name="uploadImg" accept="image/png, image/jpeg" required>
+                            <button class="btn btn-info">Upload</button></td>
+                        </form>
+                    </div>
+                    {% else %}
+                    <div class="upload-1">
+                        <h3 class="success">Upload Success</h3>
+                        <!-- <p>{{patient.face}}</p> -->
+                        <img class="upload-1" src="/media/organ_photos/face.png" alt="" style="height: 200px; width: 200px;">
+                        <img class="upload-1" src="{{patient.face.url}}" alt="" style="height: 200px; width: 200px;">
+                        <button class="btn btn-info" id="showFace" style="display: block;" onclick="displayFaceFunction()">Reupload?</button>
+                        <script>
+                            function displayFaceFunction() {
+                                document.getElementById("faceUpload").style.display = "block";
+                                document.getElementById("showFace").style.display = "none";
+                            }
+                        </script>
+                        <div id="faceUpload" style="display: none;" class="upload-1">
+                            <form action="/newPatient/{{patient.id}}/face" method="POST" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <input class="form-control form-control-lg upload-1" type="file" id="reupload" name="uploadImg" accept="image/png, image/jpeg">
+                                <button class="btn btn-info">ReUpload</button>
+                            </form>
+                            <br>
+                            <button onclick=cancelFace() class="btn btn-danger">Cancel</button>
+                            <script>
+                                function cancelFace() {
+                                    document.getElementById("faceUpload").style.display = "none";
+                                    document.getElementById("showFace").style.display = "block";
+                                }
+                            </script>
+                        </div>
+
+
+                    </div>
+                    {% endif %}
+                    </form>
+                </div>
+                <div class="upload">
+                    <form action="/newPatient/{{patient.id}}/files" method="POST" enctype="multipart/form-data" class="upload-1">
+                        {% csrf_token %}
+                        <label for="medicalRecord"><h4 class="upload-1">Upload your files here (optional)</h4></label>
+                        <input class="form-control form-control-lg upload-1" type="file" id="medicalRecord" accept=".pdf" name="medicalRecord" multiple required>
+                        <button type="button" class="btn btn-info">Upload</button>
+                    </form>
+                    {% if patient.patientFile %}
+                    <!--  -->
+                    {% for file in patient.patientFile.all %}
+                    <p>{{file.file}}</p>
+                    {% endfor %}
+                    <!--  -->
+                    {% endif %}
+                </div>
+            </center>
+        </div>
+        <br>
+        <center>
+            {% if patient.tongueCoat != '0' and patient.leftEye != '0' and patient.rightEye != '0' and patient.face != '0' %}
+            <!-- <a class="btn btn-primary" id="submit" onclick=submitFunction() role="button" href="/submit/success/{{patient.id}}">Submit</a> -->
+            <button type="button" class="btn btn-primary" style="display: block;" id="submit" onclick=submitFunction()>Submit</button>
+            <button type="button" class="btn btn-primary" style="display: none;" id="submitDisable" disabled>Please wait...</button>
+            <!--  -->
+            <script>
+                function submitFunction() {
+                    document.getElementById("submit").style.display = "none";
+                    document.getElementById("submitDisable").style.display = "block";
+                    document.getElementById("waitingRedirect").style.display = "block";
+                    setTimeout(function() {
+                        window.location.replace("/submit/success/{{patient.id}}");
+                    }, 5000)
+                }
+            </script>
+            <div class="spinner" id="waitingRedirect" style="display: none;">
+                <div class="bounce1"></div>
+                <div class="bounce2"></div>
+                <div class="bounce3"></div>
+            </div>
+            {% endif %}
+        </center>
+
+    </div>
+</body>
+<footer>
+    <center>
+        <h2>Footer</h2>
+    </center>
+</footer>
+
+</html>
