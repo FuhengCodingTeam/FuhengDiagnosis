@@ -2,13 +2,12 @@ from asyncio.windows_events import NULL
 from django.db import models
 import re
 
+
 def upload_location(patient,filename):
-    return 'patient_{0}/{1}'.format(patient.id, filename)
+    return 'patinets/patient_{0}/{1}'.format(patient.id, filename)
 
 def user_directory_path(instance, filename):
-  
-    # file will be uploaded to MEDIA_ROOT / user_<id>/<filename>
-    return 'patient_{0}/{1}'.format(instance.patient.id, filename)
+    return 'patinets/patient_{0}/{1}'.format(instance.patient.id, filename)
 
 class PatientManager(models.Manager):
     def basic_validator(self, postData):
@@ -87,9 +86,23 @@ class Patient(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     objects = PatientManager()
+    def delete(self, *args, **kwargs):
+        files = PatientFiles.objects.filter(patient=self)
+        for file in files:
+           file.delete()
+        self.tongueCoat.delete()
+        self.leftEye.delete()
+        self.rightEye.delete()
+        self.face.delete()
+        super().delete(*args, **kwargs)
+
+        
 
 class PatientFiles(models.Model):
     patient = models.ForeignKey(Patient, related_name="patientFile", on_delete=models.CASCADE)
     file = models.FileField(default=NULL, upload_to=user_directory_path)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    def delete(self, *args, **kwargs):
+       self.file.delete()
+       super().delete(*args, **kwargs)

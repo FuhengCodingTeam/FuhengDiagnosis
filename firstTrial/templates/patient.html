@@ -188,7 +188,7 @@
     </div>
     <div>
         {% if patient.diagnosisResult %}
-        <p><a href="">See Diagnosis Result</a></p>
+        <p><a href="/patient/{{patient.id}}/seeResult/page">See Diagnosis Result</a></p>
         {% else %}
         <p>No Diagnosis yet, <a href="">Send Notification?(Still In Progress)</a></p>
         <p>Or Manually Start Diagnosis

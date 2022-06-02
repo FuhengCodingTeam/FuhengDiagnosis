@@ -45,7 +45,7 @@
                         <form action="/newPatient/{{patient.id}}/tongue" method="POST" enctype="multipart/form-data">
                             {% csrf_token %}
                             <label for="tongueCoat"><h4 class="upload-1">Upload your Tongue Coat here</h4></label>
-                            <img src="/media/organ_photos/tongueCoat1.webp" alt="" style="height: 200px; width: 200px;">
+                            <img src="/media/organ_photos/tongueCoat.png" alt="" style="height: 200px; width: 200px;">
                             <img src="/media/organ_photos/blankphoto.png" alt="" style="height: 200px; width: 200px;">
                             <input class="form-control form-control-lg upload-1" type="file" name="uploadImg" accept="image/png, image/jpeg" required/>
                             <button class="btn btn-info">Upload</button>
@@ -55,7 +55,7 @@
                     <div class="upload-1">
                         <h3 class="success">Upload Success</h3>
                         <!-- <p>{{patient.tongueCoat}}</p> -->
-                        <img class="upload-1" src="/media/organ_photos/tongueCoat1.webp" alt="" style="height: 200px; width: 200px;">
+                        <img class="upload-1" src="/media/organ_photos/tongueCoat.png" alt="" style="height: 200px; width: 200px;">
                         <img class="upload-1" src="{{patient.tongueCoat.url}}" alt="" style="height: 200px; width: 200px;">
                         <button class="btn btn-info" id="showTongue" style="display: block;" onclick="displayTongueFunction()">ReUpload?</button>
                         <script>
@@ -209,7 +209,6 @@
                             </script>
                         </div>
 
-
                     </div>
                     {% endif %}
                     </form>
@@ -217,9 +216,9 @@
                 <div class="upload">
                     <form action="/newPatient/{{patient.id}}/files" method="POST" enctype="multipart/form-data" class="upload-1">
                         {% csrf_token %}
-                        <label for="medicalRecord"><h4 class="upload-1">Upload your files here (optional)</h4></label>
+                        <label for="upload-1"><h4 class="upload-1">Upload your files here (optional)</h4></label>
                         <input class="form-control form-control-lg upload-1" type="file" id="medicalRecord" accept=".pdf" name="medicalRecord" multiple required>
-                        <button type="button" class="btn btn-info">Upload</button>
+                        <button class="btn btn-info">Upload</button>
                     </form>
                     {% if patient.patientFile %}
                     <!--  -->

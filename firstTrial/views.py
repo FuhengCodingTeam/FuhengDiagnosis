@@ -10,6 +10,7 @@ from matplotlib import pyplot as plt
 import numpy as np
 
 
+
 first_diagram_partOne = {
     "lung": False,
     "pericardium": False,
@@ -820,7 +821,34 @@ def seeResult(request, patient_id):
         else:
             # result2 = (json.dumps(diagnosis2_last_index())[1:-1]+", "+json.dumps(diagnosis2_second_index())[1:-1])
             result2 = Merge(diagnosis2_second_index(),diagnosis2_last_index())
-            
+        
+        # y = np.array([100, 0])
+        # colors = ['lime','red']
+        # fig1, ax1 = plt.subplots()
+        # ax1.pie(y, colors=colors,  shadow=True, startangle=90)
+        # ax1.axis('equal') 
+        # plt.savefig('media/diagnosis/1000.png',dpi=100)
+        # #
+        # y = np.array([60,40])
+        # colors = ['lime','red']
+        # fig1, ax1 = plt.subplots()
+        # ax1.pie(y, colors=colors,  shadow=True, startangle=90)
+        # ax1.axis('equal') 
+        # plt.savefig('media/diagnosis/6040.png',dpi=100)
+        # #  
+        # y = np.array([40, 60])
+        # colors = ['lime','red']
+        # fig1, ax1 = plt.subplots()
+        # ax1.pie(y, colors=colors,  shadow=True, startangle=90)
+        # ax1.axis('equal') 
+        # plt.savefig('media/diagnosis/4060.png',dpi=100)
+        # # 
+        # y = np.array([30, 70])
+        # colors = ['lime','red']
+        # fig1, ax1 = plt.subplots()
+        # ax1.pie(y, colors=colors,  shadow=True, startangle=90)
+        # ax1.axis('equal') 
+        # plt.savefig('media/diagnosis/3070.png',dpi=100)
         patient_status_dict = Merge(result1, result2)
         patient_to_view.diagnosisResult = json.dumps(patient_status_dict)
         patient_to_view.diagnosis = True
@@ -847,34 +875,7 @@ def seeResultPage (request, patient_id):
     # secondIndex = patient_phone[len(patient_phone)-find_second_Index()]
     # firstIndex = patient_phone[len(patient_phone)-find_first_Index()]
 
-    # labels = 'Health', 'Sick'
-    # y = np.array([100, 0])
-    # colors = ['lime','red']
-    # fig1, ax1 = plt.subplots()
-    # ax1.pie(y, colors=colors,  shadow=True, startangle=90)
-    # ax1.axis('equal') 
-    # plt.savefig('media/diagnosis/1000.png',dpi=100)
-    # #
-    # y = np.array([60,40])
-    # colors = ['lime','red']
-    # fig1, ax1 = plt.subplots()
-    # ax1.pie(y, colors=colors,  shadow=True, startangle=90)
-    # ax1.axis('equal') 
-    # plt.savefig('media/diagnosis/6040.png',dpi=100)
-    # #  
-    # y = np.array([40, 60])
-    # colors = ['lime','red']
-    # fig1, ax1 = plt.subplots()
-    # ax1.pie(y, colors=colors,  shadow=True, startangle=90)
-    # ax1.axis('equal') 
-    # plt.savefig('media/diagnosis/4060.png',dpi=100)
-    # # 
-    # y = np.array([30, 70])
-    # colors = ['lime','red']
-    # fig1, ax1 = plt.subplots()
-    # ax1.pie(y, colors=colors,  shadow=True, startangle=90)
-    # ax1.axis('equal') 
-    # plt.savefig('media/diagnosis/3070.png',dpi=100)
+    
 
     patient_initial_status_dict = json.loads(diagnosis_patient.diagnosisInitial)
     patient_status_dict = json.loads(diagnosis_patient.diagnosisResult)
