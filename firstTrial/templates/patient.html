@@ -71,7 +71,7 @@
         <h5>Change of Medication: {{patient.changeMedication}}</h5>
         <h5>Changes from Last Visit? {{patient.changeLastVisit}}</h5>
         <hr> -->
-        <table>
+        <!-- <table>
             <thead>
                 <tr>
                     <th>Subject</th>
@@ -185,20 +185,47 @@
         {% else %}
         <h6>Allerigies not applied</h6>
         {% endif %}
-    </div>
-    <div>
-        {% if patient.diagnosisResult %}
-        <p><a href="/patient/{{patient.id}}/seeResult/page">See Diagnosis Result</a></p>
-        {% else %}
-        <p>No Diagnosis yet, <a href="">Send Notification?(Still In Progress)</a></p>
-        <p>Or Manually Start Diagnosis
-            <form action="/patient/{{patient.id}}/seeResult" method="POST">
-                {% csrf_token %}
-                <button>Start Diagnosis</button>
-            </form>
-        </p>
-        {% endif %}
-    </div>
+    </div> -->
+        <div class="mb-3 index_body">
+            <h4>Your Forms</h4>
+
+            <table class="table table-hover hostPortalTable">
+                <thead>
+                    <tr>
+                        <th>Case Number</th>
+                        <th>Form Submitted</th>
+                        <th>Agreement Check</th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+
+                </thead>
+                {% for form in patient_all_forms %}
+                <tbody>
+                    <tr>
+                        <td>{{form.caseNumber}}</td>
+                        <td>{{form.created_at}}</td>
+                        {% if form.agreementCheck == True %}
+                        <td>--{{form.agreementCheck}}-- Checked! <a href="/agreementCheck/{{form.id}}/{{patient.id}}/disable">Dsiable</a></td>
+                        {% else %}
+                        <td><a href="">Check</a></td>
+                        {% endif %}
+                        <td>{{form.diagnosis}}</td>
+                        <td>{{form.diagnosisInitial}}</td>
+                        <!-- <td>{{form.diagnosisResult}}</td> -->
+                        <td>No Diagnosis yet, <a href="">Send Notification?(Still In Progress)</a></td>
+                        <td>Or Manually Start Diagnosis
+                            <form action="/patient/{{form.id}}/{{patient.id}}/seeResult" method="POST">
+                                {% csrf_token %}
+                                <button>Start Diagnosis</button>
+                            </form>
+                        </td>
+                    </tr>
+                </tbody>
+                {% endfor %}
+            </table>
+
+        </div>
 </body>
 
 </html>

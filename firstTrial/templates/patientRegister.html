@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
+    <title>Patient Form Display</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <script type="text/javascript">
+        function preventBack() {
+            window.history.forward();
+        }
+        setTimeout("preventBack()", 0); 
+        window.onunload = function() {
+            null
+        };
+    </script>
+    <script>
+        $(document).ready(function() {
+            // Declare variables
+            var today = new Date();
+            // Set values
+            $("#dob").val(getFormattedDate(today));
+            // Get date formatted as YYYY-MM-DD
+            function getFormattedDate(date) {
+                return date.getFullYear() +
+                    "-" +
+                    ("0" + (date.getMonth() + 1)).slice(-2) +
+                    "-" +
+                    ("0" + date.getDate()).slice(-2);
+            }
+        })
+    </script>
+
+
+</head>
+
+<body>
+    <header class="index">
+        <h2 style="padding-left: 100px;"><a href="/" style="color: black; text-decoration: none;">MAISHEN® A.I. DIAGNOSIS <br><br> 脉神®人工智能诊断系统</a></h2>
+        <div class="nav home" style="padding-top: 50px; width: 47%;">
+            <a class="btn" href="#">
+                <h5> Home <br> 主页</h5>
+            </a>
+            <a class="btn" href="#">
+                <h5>Blog <br> 更新</h5>
+            </a>
+            <a class="btn" href="#">
+                <h5>About Us <br> 关于我们</h5>
+            </a>
+            <a class="btn" href="#">
+                <h5>How it works <br> 诊断系统</h5>
+            </a>
+            <a class="btn" href="#">
+                <h5>Career <br> 加入我们</h5>
+            </a>
+        </div>
+
+        <div class="row align-items-center" style="padding-right:100px ;">
+            <a style="margin-right: 20px; box-shadow: 5px 10px 5px #ffc10778;" class="col-md-auto btn btn-outline-warning" href="/loginE" style="color: black; text-decoration: none;">Sign In <br> 登录 </a>
+            <a style="color: black; text-decoration: none; box-shadow: 5px 10px 5px #ffc10778;" class="col-md-auto btn btn-warning" href="/register">Sign Up <br> 注册 </a>
+        </div>
+    </header>
+    <div class="container-fluid content register" style="height: auto ;background-image:url('/media/systemPhotos/pexels-eberhard-grossgasteiger-2088205.jpg');">
+        <div class="registerForm">
+            <center>
+                <h2>Register</h2>
+                <h2>注册账户</h2>
+                <p>Date of Visit: {{today_date}}</p>
+                {% if messages %}
+                <div class="messages">
+                    {% for message in messages %}
+                    <p {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</p>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </center>
+            <form action="/register/new" method='POST' class="form1 needs-validation" novalidate="">
+                {% csrf_token %}
+                <div class="row fieldArrange">
+                    <div>
+                        <label for="firstName" class="form-label"><h5>First Name</h5></label>
+                        <label for="firstName" class="form-label"><h5>名</h5></label>
+                    </div>
+                    <div>
+                        <input type="text" class="form-control" name="firstName" id="" placeholder="First Name" required>
+                        <div class="invalid-feedback">
+                            <p>Please enter your First Name.</p>
+                            <p>请输入您的名字</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row fieldArrange">
+                    <div>
+                        <label for="lastName" class="form-label"><h5>Last Name</h5></label>
+                        <label for="lastName" class="form-label"><h5>姓</h5></label>
+                    </div>
+                    <div>
+                        <input type="text" class="form-control" name="lastName" id="" placeholder="Last Name" required>
+                        <div class="invalid-feedback">
+                            <p>Please enter your Last Name.</p>
+                            <p>请输入您的姓</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="mb-3 fieldArrange">
+                    <center>
+                        <h4>What's your gender</h4>
+                        <h4>您的性别</h4>
+                        <input type="radio" class="form-check-input" id="male" name="sex" value="Male" checked="checked">
+                        <label class="check" for="male" class="form-check-label">Male</label>
+
+                        <input type="radio" class="form-check-input" id="female" name="sex" value="Female">
+                        <label class="check" for="female" class="form-check-label">Female</label>
+
+                    </center>
+                </div>
+                <div class="mb-3 fieldArrange">
+                    <center>
+                        <h4><label for="dob" class="form-label">Date of Birth </label></h4>
+                        <h4><label for="dob" class="form-label">您的出生日期</label></h4>
+                        <input style="width: 220px;" type="date" id="dob" name="date_of_birth" onfocus="this.max=new Date().toISOString().split('T')[0]">
+                    </center>
+                </div>
+                <div class="row fieldArrange">
+                    <div class="has-validation">
+                        <label for="email" class="form-label"><h5>Email Address </h5></label>
+                        <label for="email" class="form-label"><h5>电子邮箱</h5></label>
+                        <input type="email" class="form-control" name="email" placeholder="name@example.com" required>
+                        <div class="invalid-feedback">
+                            <br>
+                            <p>Please enter a vaild email address.</p>
+                            <p>请输入正确的电子邮箱</p>
+                        </div>
+                    </div>
+                </div>
+                <!--  -->
+
+                <div class="row fieldArrange">
+                    <div class="">
+                        <label for="phone" class="form-label"><h5>Enter your 10 digit Cell Phone Number</h5></label>
+                        <br>
+                        <label for="phone" class="form-label"><h5>您的10位数美国电话号码</h5></label>
+                        <br>
+                        <small>No space or parentheses needed. For example: (408) 123-4567 just enter 4081234567</small>
+                        <br>
+                        <small>注：电话号码不需要填写括号或者横线</small>
+                        <input type="tel" class="form-control" id="phone" name="phone" pattern="[0-9]{3}[0-9]{3}[0-9]{4}" required/>
+                        <div class="invalid-feedback">
+                            <br>
+                            <p>Please enter your valid 10 digit Cell Phone Number.</p>
+                            <p>请输入正确的10位数美国电话号码</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row fieldArrange">
+                    <!-- <div class="">
+                        <h4>Insurance Info</h4>
+                        <label for="insurance">Insurance type: ("N/A" if no insurance)</label>
+                        <input type="text" class="form-control" name="insurance" id="insurance">
+                        <label for="insurnaceId">Insurance ID number: </label>
+                        <input type="text" class="form-control" name="insuranceId" id="insuranceId">
+                    </div>
+                    <div class="">
+                        <h4>How do you hear about us?</h4>
+                        <select class="form-select" name="hearUs" id="hearUs">
+                        <option value="Youtube">Youtube</option>
+                        <option value="Google">Google</option>
+                        <option value="Social Media">Social Media</option>
+                        <option value="Refer">Refer by friends</option>
+                    </select>
+                        <textarea class="form-control" style="display:none" name="hearUsOther" placeholder="Your friend's name" id="hearUsOther" style="height: 100px"></textarea>
+                    </div> -->
+
+                    <div class="">
+                        <h4><label for="password">Create a password (at least 5 characters)</label></h4>
+                        <h5><label for="password">请创建一个密码 (至少5位数)</label></h5>
+                        <input type="password" class="form-control" name="password" id="show_hide_password" required>
+
+                        <center>
+                            <input type="checkbox" onclick="showPassword()">&nbsp;Show Password 显示密码
+                        </center>
+                        <h4><label for="passwordConfirm">Confirm your password</label></h4>
+                        <h5><label for="passwordConfirm">重新输入您创建的密码</label></h5>
+                        <input type="password" class="form-control" name="passwordConfirm" id="show_hide_confirm_passowrd" required>
+                        <center>
+                            <input type="checkbox" onclick="showConfirmPassword()">&nbsp;Show Password 显示密码
+                        </center>
+                    </div>
+                </div>
+                <br>
+                <center><button class="btn btn-primary">Submit <br> 确认并提交 </button></center>
+                <script>
+                    function showPassword() {
+                        var x = document.getElementById("show_hide_password");
+                        if (x.type === "password") {
+                            x.type = "text";
+                        } else {
+                            x.type = "password";
+                        }
+                    }
+                </script>
+                <script>
+                    function showConfirmPassword() {
+                        var x = document.getElementById("show_hide_confirm_passowrd");
+                        if (x.type === "password") {
+                            x.type = "text";
+                        } else {
+                            x.type = "password";
+                        }
+                    }
+                </script>
+                <!-- <script>
+                const togglePassword = document.querySelector("#togglePassword");
+                const password = document.querySelector("#password");
+
+                togglePassword.addEventListener("click", function() {
+                    // toggle the type attribute
+                    const type = password.getAttribute("type") === "password" ? "text" : "password";
+                    password.setAttribute("type", type);
+
+                    // toggle the icon
+                    this.classList.toggle("bi-eye");
+                });
+
+                // prevent form submit
+                const form = document.querySelector("form");
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                });
+            </script> -->
+                <script>
+                    (() => {
+                        'use strict'
+
+                        // Fetch all the forms we want to apply custom Bootstrap validation styles to
+                        const forms = document.querySelectorAll('.needs-validation')
+
+                        // Loop over them and prevent submission
+                        Array.from(forms).forEach(form => {
+                            form.addEventListener('submit', event => {
+                                if (!form.checkValidity()) {
+                                    event.preventDefault()
+                                    event.stopPropagation()
+                                }
+
+                                form.classList.add('was-validated')
+                            }, false)
+                        })
+                    })()
+                </script>
+                <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
+            </form>
+        </div>
+    </div>
+</body>
+<footer>
+    <h5>COMPANY</h5>
+    <h5>RESOURCES</h5>
+    <h5>FEATURES</h5>
+    <h5>FIND US</h5>
+</footer>
+
+</html>

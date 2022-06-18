@@ -32,22 +32,10 @@
             <tbody>
                 {% for patient in all_patients %}
                 <tr>
-                    <td>{{patient.firstName}} {{patient.lastName}}</td>
-                    <td><a href="/patient/{{patient.id}}/detial">{{patient.caseNumber}}</a></td>
+                    <td><a href="/patient/{{patient.id}}/detial">{{patient.firstName}} {{patient.lastName}}</a> </td>
+                    <td>{{patient.email}}</td>
                     <td>{{patient.phone_number}}</td>
                     <td>{{patient.created_at|date:"d/M/Y"}}</td>
-                    <!--  -->
-                    {% if patient.agreementCheck == True %}
-                    <td>√</td>
-                    {% else %}
-                    <td>×</td>
-                    {% endif %}
-                    <!--  -->
-                    {% if patient.diagnosisResult %}
-                    <td>√</td>
-                    {% else %}
-                    <td>×</td>
-                    {% endif %}
                     <td>
                         <a class="btn btn-outline-danger" href="/patient/{{patient.id}}/delete">Delete</a>
                     </td>
@@ -57,7 +45,7 @@
         </table>
     </div>
 
-    <div class="patient_diagnosis">
+    <!-- <div class="patient_diagnosis">
         {% if no_diagnosis_patients %}
         <h3>New Patient waitting for diagnosis!</h3>
         <ul>
@@ -69,14 +57,14 @@
                     <h5>Date: {{patient.created_at|date:"d/M/Y"}}</h5>
                     <button>Auto Diagnosis</button>
                 </form>
-                <!-- create button here, when click, redirect or generate diagnosis page below with the patient.id -->
+                
             </li>
             {% endfor %}
         </ul>
         {% else %}
         <h3>No New Patients Yet</h3>
         {% endif %}
-    </div>
+    </div> -->
 </body>
 
 </html>

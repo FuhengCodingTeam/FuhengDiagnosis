@@ -22,6 +22,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'qvcsun8s6*u%h8&0-l(cr7d3dvttejxhrd3o)ms1)4=djct&a9'
 
+GOOGLE_API_KEY = 'AIzaSyD--your-google-maps-key-SjQBE'
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
@@ -32,6 +34,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'firstTrial',
+    'address',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

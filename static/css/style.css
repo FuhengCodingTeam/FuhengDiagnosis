@@ -1,35 +1,76 @@
-header {
-    /* background-color: darkgray; */
-    width: 1200px;
-    margin: 0 auto;
+.body {
+    min-width: 1000px;
+}
+
+.index {
+    position: absolute;
+    width: 100%;
     display: flex;
     justify-content: space-between;
     text-align: center;
-    margin-bottom: 50px;
+    height: 12rem;
     padding: 20px;
-    border: 1px solid black;
+    background-color: white;
+    box-shadow: 0 5px 5px rgba(86, 85, 85, 0.746);
+}
+
+.index2 {
+    position: absolute;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    text-align: center;
+    height: 12rem;
+    padding: 20px;
+    background-color: #333;
+    box-shadow: 0 5px 5px rgba(0, 0, 0, 0.746);
+}
+
+header h2 {
+    align-self: center;
 }
 
 .form1 {
-    margin-left: 300px;
+    padding: 0 20px;
+}
+
+form i {
+    margin-left: -30px;
+    cursor: pointer;
 }
 
 .form2-1 {
-    padding-top: 50px;
+    padding-top: 10px;
+    display: flex;
+}
+
+.formUpload2-1 {
+    padding-top: 10px;
+    display: flex;
 }
 
 .form2-2 {
-    padding: 10px 0;
+    display: flex;
+    height: 520px;
+    margin: 20px auto;
+}
+
+.formUpload2-2 {
+    display: flex;
+    height: 520px;
+    margin: 20px auto;
 }
 
 .form2btn {
     text-align: center;
-    padding-top: 20px;
+    padding: 20px 0;
 }
 
 .upload {
     width: 407px;
     border: 1px dotted black;
+    text-align: center;
+    margin-right: 100px;
 }
 
 .upload-1 {
@@ -37,7 +78,7 @@ header {
 }
 
 .success {
-    color: rgb(65, 238, 248);
+    color: rgb(52, 240, 99);
 }
 
 .fieldArrange {
@@ -55,36 +96,61 @@ header {
     padding: 20px;
 }
 
-footer {
-    background-color: #333;
-    height: 10em;
-    padding: 20px;
-    color: white;
-    margin: 10px auto;
-    width: 1200px;
+.backImg1 {
+    background-image: url("/media/systemPhotos/laboratory-g2011f76d0_1920.jpg");
+    height: 100%;
+    width: 100%;
+}
+
+.backImg2 {
+    background-image: url("/media/systemPhotos/medical-g32e4c15dd_1920.jpg");
+    height: 100%;
+    width: 100%;
 }
 
 .personalInfo {
-    margin-left: 50px;
+    margin-left: 200px;
+    padding-top: 155px;
 }
 
 .patientImgFeild {
-    border: 1px dotted black;
     padding: 20px;
     display: flex;
+    position: absolute;
+    right: 5%;
+    top: 34%;
 }
 
-.wrapper {
-    width: 1200px;
-    margin: 0 auto;
+
+/* .wrapper {
+    position: static;
     padding: 60px;
     border: 1px dotted black;
-}
+} */
 
 .index_body {
-    border: 1px solid black;
+    position: absolute;
+    top: 21%;
+    left: 28%;
     padding: 20px;
-    height: 40em;
+    height: 9%;
+}
+
+.index_body button {
+    color: white;
+    border: 5px solid #ffc107;
+    background-color: black;
+    box-shadow: 0 10px 10px rgba(0, 0, 0, .6);
+}
+
+.index_body button:hover {
+    background-color: #ffc107;
+    color: black;
+    border: 5px solid #ffc107;
+}
+
+.index_body a:active {
+    transform: translateY(4px);
 }
 
 .spinner {
@@ -135,4 +201,453 @@ footer {
         -webkit-transform: scale(1.0);
         transform: scale(1.0);
     }
+}
+
+.messages {
+    color: rgb(234, 52, 52);
+    padding-top: 20px;
+    margin: 0 auto;
+    position: absolute;
+    background: rgba(0, 0, 0, .5);
+    width: 20%;
+    top: 45%;
+    left: 6%;
+    padding: 20px;
+    height: auto;
+    border-radius: 30px;
+}
+
+.loginLeft {
+    border: 1px dotted black;
+    margin-right: 40px;
+    padding: 20px;
+}
+
+.loginField {
+    border: 1px dotted black;
+}
+
+.login-box {
+    position: absolute;
+    top: 65%;
+    left: 50%;
+    width: 600px;
+    padding: 50px;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, .5);
+    box-sizing: border-box;
+    box-shadow: 0 15px 25px rgba(0, 0, 0, .6);
+    border-radius: 10px;
+    height: 78%;
+}
+
+.login-box h2 {
+    margin: 0 0 30px;
+    padding: 0;
+    color: #fff;
+    text-align: center;
+}
+
+.login-box .user-box {
+    position: relative;
+}
+
+.login-box .user-box input {
+    width: 100%;
+    padding: 10px 0;
+    font-size: 16px;
+    color: #fff;
+    margin-bottom: 30px;
+    border: none;
+    border-bottom: 1px solid #fff;
+    outline: none;
+    background: transparent;
+}
+
+.login-box .user-box label {
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 10px 0;
+    font-size: 16px;
+    color: #fff;
+    pointer-events: none;
+    transition: .5s;
+}
+
+.login-box .user-box input:focus~label,
+.login-box .user-box input:valid~label {
+    top: -20px;
+    left: 0;
+    color: #03e9f4;
+    font-size: 12px;
+}
+
+.login-box form button {
+    position: relative;
+    display: inline-block;
+    padding: 10px 20px;
+    color: #03e9f4;
+    font-size: 16px;
+    text-decoration: none;
+    text-transform: uppercase;
+    overflow: hidden;
+    transition: .5s;
+    margin-top: 40px;
+    letter-spacing: 4px;
+    background-color: transparent;
+    background-repeat: no-repeat;
+    border: none;
+    cursor: pointer;
+    outline: none;
+}
+
+.login-box form a {
+    position: relative;
+    display: inline-block;
+    padding: 10px 20px;
+    color: #03e9f4;
+    font-size: 15px;
+    text-decoration: none;
+    text-transform: uppercase;
+    overflow: hidden;
+    transition: .5s;
+    margin-top: 40px;
+    letter-spacing: 1px;
+}
+
+.login-box button:hover {
+    background: #03e9f4;
+    color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 0 5px #03e9f4, 0 0 25px #03e9f4, 0 0 50px #03e9f4, 0 0 100px #03e9f4;
+}
+
+.login-box a:hover {
+    background: #03e9f4;
+    color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 0 5px #03e9f4, 0 0 25px #03e9f4, 0 0 50px #03e9f4, 0 0 100px #03e9f4;
+}
+
+.login-box button span {
+    position: absolute;
+    display: block;
+}
+
+.login-box button span:nth-child(1) {
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #03e9f4);
+    animation: btn-anim1 1s linear infinite;
+}
+
+@keyframes btn-anim1 {
+    0% {
+        left: -100%;
+    }
+    50%,
+    100% {
+        left: 100%;
+    }
+}
+
+.login-box button span:nth-child(2) {
+    top: -100%;
+    right: 0;
+    width: 2px;
+    height: 100%;
+    background: linear-gradient(180deg, transparent, #03e9f4);
+    animation: btn-anim2 1s linear infinite;
+    animation-delay: .25s
+}
+
+@keyframes btn-anim2 {
+    0% {
+        top: -100%;
+    }
+    50%,
+    100% {
+        top: 100%;
+    }
+}
+
+.login-box button span:nth-child(3) {
+    bottom: 0;
+    right: -100%;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(270deg, transparent, #03e9f4);
+    animation: btn-anim3 1s linear infinite;
+    animation-delay: .5s
+}
+
+@keyframes btn-anim3 {
+    0% {
+        right: -100%;
+    }
+    50%,
+    100% {
+        right: 100%;
+    }
+}
+
+.login-box button span:nth-child(4) {
+    bottom: -100%;
+    left: 0;
+    width: 2px;
+    height: 100%;
+    background: linear-gradient(360deg, transparent, #03e9f4);
+    animation: btn-anim4 1s linear infinite;
+    animation-delay: .75s
+}
+
+@keyframes btn-anim4 {
+    0% {
+        bottom: -100%;
+    }
+    50%,
+    100% {
+        bottom: 100%;
+    }
+}
+
+.loginOption {
+    position: absolute;
+    top: 96%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.loginOption a {
+    position: relative;
+    display: inline-block;
+    padding: 5px 20px;
+    color: #03e9f4;
+    font-size: 14px;
+    text-decoration: none;
+    text-transform: uppercase;
+    overflow: hidden;
+    transition: .5s;
+    /* margin-top: 40px; */
+    letter-spacing: 4px
+}
+
+.loginOption a:hover {
+    background: #03e9f4;
+    color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 0 5px #03e9f4, 0 0 25px #03e9f4, 0 0 50px #03e9f4, 0 0 100px #03e9f4;
+}
+
+footer {
+    position: relative;
+    width: 100%;
+    background-color: #333;
+    height: 5rem;
+    padding: 20px;
+    color: white;
+    margin: 0 auto;
+    border: 1px solid white;
+    display: flex;
+    justify-content: space-evenly;
+}
+
+
+/* Header */
+
+.large-header {
+    position: static;
+    width: 100%;
+    background: #333;
+    overflow: hidden;
+    background-size: cover;
+    background-position: center center;
+    z-index: 1;
+    height: 1190px;
+}
+
+#large-header {
+    background-image: url('/media/systemPhotos/image-from-rawpixel-id-2332071-jpeg.jpg');
+}
+
+.containers {
+    margin: 0 auto;
+    max-width: 700px;
+    width: 90%;
+    padding: 20px;
+    box-shadow: 0px 0px 20px #00000020;
+    border-radius: 8px;
+    background-color: white;
+    text-align: center;
+}
+
+.mynav {
+    width: 13%;
+    padding: 19px 30px;
+    position: absolute;
+    left: 0%;
+    top: 18%;
+    background-color: #333;
+    height: 760px;
+}
+
+.other1 {
+    width: 15%;
+    position: absolute;
+    right: 0%;
+    top: 20%;
+    background-color: #333;
+    height: 760px;
+}
+
+.mynav a {
+    background-color: black;
+    display: block;
+    margin-bottom: 75px;
+    color: white;
+    border: 2px solid #ffc107;
+}
+
+.mynav a:hover {
+    background-color: #ffc107;
+    color: black;
+}
+
+.mynav a:active {
+    transform: translateY(4px);
+}
+
+.register {
+    padding-bottom: 50px;
+    height: 880px;
+}
+
+.registerForm {
+    margin: 5% auto;
+    width: 52%;
+    padding: 20px;
+    box-shadow: 47px 36px 18px #00000020;
+    border-radius: 8px;
+    background-color: white;
+}
+
+.registerForm button {
+    padding: 10px 20px;
+    border-radius: 15px;
+    box-shadow: 0 5px 10px black;
+}
+
+.registerForm button:active {
+    transform: translateY(4px);
+}
+
+.step {
+    display: none;
+}
+
+.step.active {
+    display: block;
+}
+
+.step input {
+    appearance: none;
+}
+
+.check {
+    margin: 0 30px 0 0;
+}
+
+.content {
+    padding-top: 132px;
+}
+
+.wrapper {
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.content img {
+    width: 100%;
+}
+
+.formList {
+    padding: 30px;
+    position: absolute;
+    background-color: white;
+    left: 23%;
+    top: 34%;
+    width: 45%;
+    border: 3px solid black;
+    overflow-y: scroll;
+    height: 58%;
+}
+
+.newForm {
+    padding-top: 175px;
+}
+
+#info {
+    display: block;
+    padding: 10px;
+    width: 99%;
+    border-radius: 10px;
+    margin-left: 20px;
+    margin-bottom: 40px;
+}
+
+.diagnosis button {
+    box-shadow: 0 9px #999;
+    border-radius: 15px;
+}
+
+.diagnosis button:active {
+    background-color: #fded15;
+    box-shadow: 0 5px #666;
+    transform: translateY(4px);
+}
+
+.patientImgFeild center {
+    padding-right: 20px;
+}
+
+.questionForm {
+    height: 200px;
+    margin-top: 120px;
+}
+
+.option {
+    position: absolute;
+    top: 54%;
+    left: 47%;
+}
+
+.questionForm .step svg:active {
+    transform: translateY(4px);
+}
+
+.questionForm .step svg:hover {
+    color: #03e9f4;
+}
+
+.home a {
+    border: 2px solid black;
+    box-shadow: 10px 11px 5px #666;
+    margin-right: 50px;
+    margin-bottom: 25px;
+}
+
+.dark a {
+    background-color: white;
+}
+
+.patientFileFeild {
+    border: 3px solid black;
+    border-radius: 10px;
+    padding: 20px;
+    margin-left: 20px;
+    width: 30%;
+    margin-bottom: 30px;
 }

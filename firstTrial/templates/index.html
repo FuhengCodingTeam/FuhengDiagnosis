@@ -20,35 +20,49 @@
 </head>
 
 <body>
-    <header>
-        <h2>Welcome to A.I. Diagnosis</h2>
-        <div class="row align-items-center">
-            <a class="col-md-auto" href="/">Home</a>
-            <a class="col-md-auto" href="">How it Works</a>
-            <a class="col-md-auto" href="">Contact Us</a>
-
+    <header class="index">
+        <h2 style="padding-left: 100px;">MAISHEN® A.I. DIAGNOSIS <br><br> 脉神®人工智能诊断系统 </h2>
+        <div class="nav home" style="padding-top: 50px; width: 47%;">
+            <a class="btn" href="/">
+                <h5> Home <br> 主页</h5>
+            </a>
+            <a class="btn" href="#">
+                <h5>Blog <br> 更新</h5>
+            </a>
+            <a class="btn" href="#">
+                <h5>About Us <br> 关于我们</h5>
+            </a>
+            <a class="btn" href="#">
+                <h5>How it works <br> 诊断系统</h5>
+            </a>
+            <a class="btn" href="#">
+                <h5>Career <br> 加入我们</h5>
+            </a>
+        </div>
+        <div class="row align-items-center" style="padding-right:100px ;">
+            {% if patient %}
+            <div style="text-align:center;">
+                <h5>Hello {{patient.firstName}} {{patient.lastName}}</h5>
+                <a style="padding: 10px; margin:10px" class="btn btn-outline-warning" href="/dashboard">Dashboard <br> 用户界面 </a>
+                <a style="padding: 10px; margin:10px" class="btn btn-outline-dark" href="/logout">Logout <br> 登出</a>
+            </div> {% else %}
+            <a style="margin-right: 20px; box-shadow: 5px 10px 5px #ffc10778;" class="col-md-auto btn btn-outline-warning" href="/loginE" style="color: black; text-decoration: none;">Sign In <br> 登录 </a>
+            <a style="color: black; text-decoration: none; box-shadow: 5px 10px 5px #ffc10778;" class="col-md-auto btn btn-warning" href="/register">Sign Up <br> 注册 </a> {% endif %}
         </div>
     </header>
-    <div class="wrapper">
-        <div class="mb-3 index_body">
-            <form action="/login" method="POST">
-                {% csrf_token %}
-                <input type="text" class="form-control" name="caseNumber" id="" required onblur="this.value=removeSpaces(this.value);">
-                <br>
-                <button class="btn btn-outline-dark" value>Click here to check your case status</button>
-            </form>
-        </div>
-        <br>
-        <div class="index_body">
-            <a class="btn btn-outline-dark" role="button" href=" /register ">Click here to fill out a new form</a>
-
+    <div style="background-color:whitesmoke;">
+        <div class="container-fluid content">
+            <img src="/media/systemPhotos/background1.jpg" alt="" style="padding:20% 0;">
         </div>
     </div>
+    <footer>
+        <h5>COMPANY</h5>
+        <h5>RESOURCES</h5>
+        <h5>FEATURES</h5>
+        <h5>FIND US</h5>
+    </footer>
+
 </body>
-<footer>
-    <center>
-        <h2>Footer</h2>
-    </center>
-</footer>
+
 
 </html>

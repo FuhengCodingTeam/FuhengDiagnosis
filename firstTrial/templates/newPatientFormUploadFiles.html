@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Your Document</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <!-- <script type="text/javascript">
+        function preventBack() {
+            window.history.forward();
+        }
+        setTimeout("preventBack()", 0); 
+        window.onunload = function() {
+            null
+        };
+    </script> -->
+</head>
+
+<body>
+    <header class="index2" style="box-shadow:none ;">
+        <h2 style="padding-left: 100px; color: white;"> MAISHEN® A.I. DIAGNOSIS <br><br> 脉神®人工智能诊断系统 </h2>
+        <div class="nav home dark" style="padding-top: 50px; width: 47%; margin-left: -15%;">
+            <a class="btn" href="/">
+                <h5> Home <br> 主页</h5>
+            </a>
+            <a class="btn" href="#">
+                <h5>Blog <br> 更新</h5>
+            </a>
+            <a class="btn" href="#">
+                <h5>About Us <br> 关于我们</h5>
+            </a>
+            <a class="btn" href="#">
+                <h5>How it works <br> 诊断系统</h5>
+            </a>
+            <a class="btn" href="#">
+                <h5>Career <br> 加入我们</h5>
+            </a>
+        </div>
+        <div class="row align-items-center" style="padding-right:100px ;">
+            <a style="color: black; text-decoration: none; box-shadow: 5px 10px 5px #ffc10778;" class="col-md-auto btn btn-warning" href="/logout">Logout <br> 登出 </a>
+        </div>
+    </header>
+    <div class="wrapper" style="padding:170px 200px ;">
+        <div class="formUpload2-1">
+            <div class="formUpload2-2">
+                <div class="upload">
+                    {% if not form.tongueCoat %}
+                    <div class="upload-1">
+                        <form action="/newform/{{form.id}}/tongue" method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <label for="tongueCoat"><h4 class="upload-1">Upload your Tongue Coat here</h4></label>
+                            <img src="/media/organ_photos/tongueCoat.png" alt="" style="height: 200px; width: 200px;">
+                            <img src="/media/organ_photos/blankphoto.png" alt="" style="height: 200px; width: 200px;">
+                            <input class="form-control form-control-lg upload-1" type="file" name="uploadImg" accept="image/png, image/jpeg" required/>
+                            <button class="btn btn-info">Upload</button>
+                        </form>
+                    </div>
+                    {% else %}
+                    <div class="upload-1">
+                        <br>
+                        <img src="/media/organ_photos/tongueCoat.png" alt="" style="height: 200px; width: 200px;">
+                        <img src="{{form.tongueCoat.url}}" alt="" style="height: 200px; width: 200px;">
+                        <br>
+                        <br>
+                        <br>
+                        <h3 class="success">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-check-circle-fill" viewBox="0 0 17 17">
+                                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+                              </svg> Upload Success</h3>
+                        <br>
+                        <center>
+                            <button class="btn btn-warning" id="showTongue" style="display: block;" onclick="displayTongueFunction()">
+                                  <h5>Upload Again?</h5>
+                            </button>
+                        </center>
+                        <script>
+                            function displayTongueFunction() {
+                                document.getElementById("tongue").style.display = "block";
+                                document.getElementById("showTongue").style.display = "none";
+                            }
+                        </script>
+                        <div id="tongue" style="display: none;" class="upload-1">
+                            <form action="/newform/{{form.id}}/tongue" method="POST" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <input class="form-control form-control-lg upload-1" type="file" id="reupload" name="uploadImg" accept="image/png, image/jpeg">
+                                <button class="btn btn-warning"><svg xmlns="http://www.w3.org/2000/svg" width="70" height="40" fill="currentColor" class="bi bi-arrow-clockwise" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"/>
+                                    <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z"/>
+                                  </svg></button>
+                            </form>
+                            <br>
+                            <button onclick=cancelTongue() class="btn btn-danger">Cancel</button>
+                            <script>
+                                function cancelTongue() {
+                                    document.getElementById("tongue").style.display = "none";
+                                    document.getElementById("showTongue").style.display = "block";
+                                }
+                            </script>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="upload">
+                    {% if not form.face %}
+                    <div class="upload-1">
+                        <form action="/newform/{{form.id}}/face" method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <label for="face"><h4 class="upload-1">Upload your Face here</h4></label>
+                            <img src="/media/organ_photos/face.png" alt="" style="height: 200px; width: 200px;">
+                            <img src="/media/organ_photos/blankphoto.png" alt="" style="height: 200px; width: 200px;">
+                            <input class="form-control form-control-lg upload-1" type="file" name="uploadImg" accept="image/png, image/jpeg" required>
+                            <button class="btn btn-info">Upload</button></td>
+                        </form>
+                    </div>
+                    {% else %}
+                    <div class="upload-1">
+                        <br>
+                        <img src="/media/organ_photos/face.png" alt="" style="height: 200px; width: 200px;">
+                        <img src="{{form.face.url}}" alt="" style="height: 200px; width: 200px;">
+                        <br>
+                        <br>
+                        <br>
+                        <h3 class="success">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-check-circle-fill" viewBox="0 0 17 17">
+                                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+                              </svg> Upload Success</h3>
+                        <br>
+                        <center>
+                            <button class="btn btn-warning" id="showFace" style="display: block;" onclick="displayFaceFunction()">
+                                <h5>Upload Again?</h5>
+                            </button>
+                        </center>
+                        <script>
+                            function displayFaceFunction() {
+                                document.getElementById("faceUpload").style.display = "block";
+                                document.getElementById("showFace").style.display = "none";
+                            }
+                        </script>
+                        <div id="faceUpload" style="display: none;" class="upload-1">
+                            <form action="/newform/{{form.id}}/face" method="POST" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <input class="form-control form-control-lg upload-1" type="file" id="reupload" name="uploadImg" accept="image/png, image/jpeg">
+                                <button class="btn btn-warning"><svg xmlns="http://www.w3.org/2000/svg" width="70" height="40" fill="currentColor" class="bi bi-arrow-clockwise" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"/>
+                                    <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z"/>
+                                  </svg></button>
+                            </form>
+                            <br>
+                            <button onclick=cancelFace() class="btn btn-danger">Cancel</button>
+                            <script>
+                                function cancelFace() {
+                                    document.getElementById("faceUpload").style.display = "none";
+                                    document.getElementById("showFace").style.display = "block";
+                                }
+                            </script>
+                        </div>
+
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="form2-1">
+            <div class="form2-2">
+                <div class="upload">
+                    {% if not form.leftEye %}
+                    <div class="upload-1">
+                        <form action="/newform/{{form.id}}/leftEye" method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <label for="leftEye"><h4 class="upload-1">Upload your Left Eye here</h4></label>
+                            <img src="/media/organ_photos/left_eye.jpg" alt="" style="height: 200px; width: 200px;">
+                            <img src="/media/organ_photos/blankphoto.png" alt="" style="height: 200px; width: 200px;">
+                            <input class="form-control form-control-lg upload-1" type="file" name="uploadImg" accept="image/png, image/jpeg" required>
+                            <button class="btn btn-info">Upload</button>
+                        </form>
+                    </div>
+                    {% else %}
+                    <div class="upload-1">
+                        <br>
+                        <img src="/media/organ_photos/left_eye.jpg" alt="" style="height: 200px; width: 200px;">
+                        <img src="{{form.leftEye.url}}" alt="" style="height: 200px; width: 200px;">
+                        <br>
+                        <br>
+                        <br>
+                        <h3 class="success">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-check-circle-fill" viewBox="0 0 17 17">
+                                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+                              </svg> Upload Success</h3>
+                        <br>
+                        <center>
+                            <button class="btn btn-warning" id="showLeftEye" style="display: block;" onclick="displayLeftEyeFunction()">
+                                <h5>Upload Again?</h5>
+                            </button>
+                        </center>
+                        <script>
+                            function displayLeftEyeFunction() {
+                                document.getElementById("leftEye").style.display = "block";
+                                document.getElementById("showLeftEye").style.display = "none";
+                            }
+                        </script>
+                        <div id="leftEye" style="display:none" class="upload-1">
+                            <form action="/newform/{{form.id}}/leftEye" method="POST" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <input class="form-control form-control-lg upload-1" type="file" id="reupload" name="uploadImg" accept="image/png, image/jpeg">
+                                <button class="btn btn-warning"><svg xmlns="http://www.w3.org/2000/svg" width="70" height="40" fill="currentColor" class="bi bi-arrow-clockwise" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"/>
+                                    <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z"/>
+                                  </svg></button>
+                            </form>
+                            <br>
+                            <button onclick=cancelLEye() class="btn btn-danger">Cancel</button>
+                            <script>
+                                function cancelLEye() {
+                                    document.getElementById("leftEye").style.display = "none";
+                                    document.getElementById("showLeftEye").style.display = "block";
+                                }
+                            </script>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="upload">
+                    {% if not form.rightEye %}
+                    <div class="upload-1">
+                        <form action="/newform/{{form.id}}/rightEye" method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <label for="rightEye"><h4 class="upload-1">Upload your Right Eye here</h4></label>
+                            <img src="/media/organ_photos/right_eye.jpg" alt="" style="height: 200px; width: 200px;">
+                            <img src="/media/organ_photos/blankphoto.png" alt="" style="height: 200px; width: 200px;">
+                            <input class="form-control form-control-lg upload-1" type="file" name="uploadImg" accept="image/png, image/jpeg" required>
+                            <button class="btn btn-info">Upload</button>
+                        </form>
+                    </div>
+                    {% else %}
+                    <div class="upload-1">
+                        <br>
+                        <img src="/media/organ_photos/right_eye.jpg" alt="" style="height: 200px; width: 200px;">
+                        <img src="{{form.rightEye.url}}" alt="" style="height: 200px; width: 200px;">
+                        <br>
+                        <br>
+                        <br>
+                        <h3 class="success">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-check-circle-fill" viewBox="0 0 17 17">
+                                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+                              </svg> Upload Success</h3>
+                        <br>
+                        <center>
+                            <button class="btn btn-warning" id="showRightEye" style="display: block;" onclick="displayRigtEyeFunction()">
+                                <h5>Upload Again?</h5>
+                            </button>
+                        </center>
+                        <script>
+                            function displayRigtEyeFunction() {
+                                document.getElementById("rightEyeUpload").style.display = "block";
+                                document.getElementById("showRightEye").style.display = "none";
+                            }
+                        </script>
+                        <div id="rightEyeUpload" style="display: none;" class="upload-1">
+                            <form action="/newform/{{form.id}}/rightEye" method="POST" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <input class="form-control form-control-lg upload-1" type="file" id="reupload" name="uploadImg" accept="image/png, image/jpeg" required>
+                                <button class="btn btn-warning"><svg xmlns="http://www.w3.org/2000/svg" width="70" height="40" fill="currentColor" class="bi bi-arrow-clockwise" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"/>
+                                    <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z"/>
+                                  </svg></button>
+                            </form>
+                            <br>
+                            <button onclick=cancelREye() class="btn btn-danger">Cancel</button>
+                            <script>
+                                function cancelREye() {
+                                    document.getElementById("rightEyeUpload").style.display = "none";
+                                    document.getElementById("showRightEye").style.display = "block";
+                                }
+                            </script>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+                </form>
+            </div>
+        </div>
+        <center>
+            <form action="/newform/{{form.id}}/files" method="POST" enctype="multipart/form-data" class="upload-1">
+                {% csrf_token %}
+                <label for="upload-1"><h4 class="upload-1">Upload your files here (optional)</h4></label>
+                <input class="form-control form-control-lg upload-1" type="file" id="medicalRecord" accept=".pdf" name="medicalRecord" multiple required>
+                <button class="btn btn-info">Upload</button>
+            </form>
+            {% if patient.patientFile %}
+            <!--  -->
+            {% for file in patient.patientFile.all %}
+            <p>{{file.file}}</p>
+            {% endfor %}
+            <!--  -->
+            {% endif %}
+        </center>
+        <br>
+        <center>
+            {% if form.tongueCoat and form.leftEye and form.rightEye and form.face %}
+            <button type="button" class="btn btn-primary" style="display: block;" id="submit" onclick=submitFunction()>Submit</button>
+            <button type="button" class="btn btn-primary" style="display: none;" id="submitDisable" disabled>Please wait...</button>
+            <!--  -->
+            <script>
+                function submitFunction() {
+                    document.getElementById("submit").style.display = "none";
+                    document.getElementById("submitDisable").style.display = "block";
+                    document.getElementById("waitingRedirect").style.display = "block";
+                    setTimeout(function() {
+                        window.location.replace("/submit/success/{{form.id}}");
+                    }, 5000)
+                }
+            </script>
+            <div class="spinner" id="waitingRedirect" style="display: none;">
+                <div class="bounce1"></div>
+                <div class="bounce2"></div>
+                <div class="bounce3"></div>
+            </div>
+            {% endif %}
+        </center>
+
+    </div>
+</body>
+<footer>
+    <center>
+        <h2>Footer</h2>
+    </center>
+</footer>
+
+</html>

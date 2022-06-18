@@ -14,21 +14,35 @@
 </head>
 
 <body>
-    <header>
-        <h2>Welcome to A.I. Diagnosis</h2>
-        <div class="row align-items-center">
-            <a class="col-md-auto" href="/">Home</a>
-            <a class="col-md-auto" href="">How it Works</a>
-            <a class="col-md-auto" href="">Contact Us</a>
-
+    <header class="index2">
+        <h2 style="padding-left: 100px;"><a href="/" style="color: white; text-decoration: none;"> MAISHEN® A.I. DIAGNOSIS <br><br> 脉神®人工智能诊断系统</a> </h2>
+        <div class="nav home dark" style="padding-top: 50px; width: 47%;">
+            <a class="btn" href="#">
+                <h5> Home <br> 主页</h5>
+            </a>
+            <a class="btn" href="#">
+                <h5>Blog <br> 更新</h5>
+            </a>
+            <a class="btn" href="#">
+                <h5>About Us <br> 关于我们</h5>
+            </a>
+            <a class="btn" href="#">
+                <h5>How it works <br> 诊断系统</h5>
+            </a>
+            <a class="btn" href="#">
+                <h5>Career <br> 加入我们</h5>
+            </a>
+        </div>
+        <div class="row align-items-center" style="padding-right:100px ;">
+            <a style="color: black; text-decoration: none; box-shadow: 5px 10px 5px #ffc10778;" class="col-md-auto btn btn-warning" href="/logout">Logout <br> 登出 </a>
         </div>
     </header>
-    <div class="wrapper">
+    <div class="wrapper" style="padding-top:90px ;">
         <!-- personal info -->
-        <div class="personalInfo">
+        <div class="personalInfo" style="margin-left:30%;">
             <div class="row">
                 <div class="col-5">
-                    <h4>Name:</h4>
+                    <h4>Name 姓名:</h4>
                 </div>
                 <div class="col-5">
                     <p>{{patient.firstName}} {{patient.lastName}}</p>
@@ -36,23 +50,23 @@
             </div>
             <div class="row">
                 <div class="col-5">
-                    <h4>Case Number:</h4>
+                    <h4>Case Number 诊断编号:</h4>
                 </div>
                 <div class="col-5">
-                    <p>{{patient.caseNumber}}</p>
+                    <p>{{form.caseNumber}}</p>
                 </div>
             </div>
             <div class="row">
                 <div class="col-5">
-                    <h4>Gender:</h4>
+                    <h4>Gender 性别:</h4>
                 </div>
                 <div class="col-5">
                     <p>{{patient.sex}}</p>
                 </div>
             </div>
-            <div class="row">
+            <!-- <div class="row">
                 <div class="col-5">
-                    <h4>Phone Number:</h4>
+                    <h4>Phone Number 电话号码:</h4>
                 </div>
                 <div class="col-5">
                     <p>{{patient.phone_number}}</p>
@@ -60,22 +74,22 @@
             </div>
             <div class="row">
                 <div class="col-5">
-                    <h4>Email:</h4>
+                    <h4>Email 电子邮件:</h4>
                 </div>
                 <div class="col-5">
                     <p>{{patient.email}}</p>
                 </div>
-            </div>
+            </div> -->
             <div class="row">
                 <div class="col-5">
-                    <h4>Patient Date of Birth:</h4>
+                    <h4>Patient Date of Birth 生日:</h4>
                 </div>
                 <div class="col-5">
                     <p>{{patient.date_of_birth}}</p>
                 </div>
             </div>
         </div>
-        <center style="padding: 30px;">
+        <div style="padding: 30px; margin-left: 24%;">
             <table class="hostPortalTable">
                 <thead>
                     <tr>
@@ -87,26 +101,26 @@
                 </thead>
                 <tbody>
                     <tr>
-                        {% if patient.tongueCoat %}
-                        <td style="padding: 20px;"><img src="{{patient.tongueCoat.url}}" alt="" style="height:200px ; width: 200px;"></td>
+                        {% if form.tongueCoat %}
+                        <td style="padding: 20px;"><img src="{{form.tongueCoat.url}}" alt="" style="height:200px ; width: 200px;"></td>
                         {% endif %}
                         <!--  -->
-                        {% if patient.leftEye %}
-                        <td style="padding: 20px;"><img src="{{patient.leftEye.url}}" alt="" style="height:200px ; width: 200px;"></td>
+                        {% if form.leftEye %}
+                        <td style="padding: 20px;"><img src="{{form.leftEye.url}}" alt="" style="height:200px ; width: 200px;"></td>
                         {% endif %}
                         <!--  -->
-                        {% if patient.rightEye %}
-                        <td style="padding: 20px;"><img src="{{patient.rightEye.url}}" alt="" style="height:200px ; width: 200px;"></td>
+                        {% if form.rightEye %}
+                        <td style="padding: 20px;"><img src="{{form.rightEye.url}}" alt="" style="height:200px ; width: 200px;"></td>
                         {% endif %}
                         <!--  -->
-                        {% if patient.face %}
-                        <td style="padding: 20px;"><img src="{{patient.face.url}}" alt="" style="height:200px ; width: 200px;"></td>
+                        {% if form.face %}
+                        <td style="padding: 20px;"><img src="{{form.face.url}}" alt="" style="height:200px ; width: 200px;"></td>
                         {% endif %}
                     </tr>
                 </tbody>
             </table>
-        </center>
-        <center class="patientFileFeild">
+        </div>
+        <div class="patientFileFeild" style="margin-left:35% ;">
             {% if patient.patientFile %}
             <!--  -->
             {% for file in patient.patientFile.all %}
@@ -117,15 +131,16 @@
             {% endfor %}
             <!--  -->
             {% endif %}
-        </center>
+        </div>
         <!-- <p>patient.agreementCheck: {{patient.agreementCheck}}</p>
         <p>patient.diagnosis: {{patient.diagnosis}}</p>
         <p>patient.diagnosisInitial: {{patient.diagnosisInitial}}</p>
         <p>patient.diagnosisResult: {{patient.diagnosisResult}}</p> -->
         <center>
-            <a href="">Send your diagnosis to your email</a>
+            <a class="btn btn-primary disabled" href="">Send your diagnosis to your email</a>
             <br>
-            <a href="">Any question? Feel free to contact us.</a>
+            <br>
+            <a class="btn btn-primary disabled" href="">Any question? Feel free to contact us.</a>
         </center>
 
         <hr>
@@ -204,7 +219,7 @@
                     {% else %}
                     <tr>
                         <td>Pericardium</td>
-                        <td><img src="/media/organ_photos/pericardium.webp" alt="" style="height:160px;width: 250px;"><img src="/media/organ_photos/mammary_gland.png" alt="" style="height:160px;width: 250px;"></td>
+                        <td><img src="/media/organ_photos/pericardium.webp" alt="" style="height:160px;width: 250px;"></td>
                         {% if pericardium == initialPericardium %}
                         <!--  -->
                         {% if pericardium == False %}
@@ -580,15 +595,18 @@
                 </tbody>
             </table>
         </div>
-        <center>
-            <a class="btn btn-primary btn-lg" href="/">Back To Home</a>
-        </center>
+        <div>
+            <center style="margin:100px">
+                <a class="btn btn-primary btn-lg" href="/dashboard">Back To Dashboard</a>
+            </center>
+        </div>
     </div>
 </body>
 <footer>
-    <center>
-        <h2>Footer</h2>
-    </center>
+    <h5>COMPANY</h5>
+    <h5>RESOURCES</h5>
+    <h5>FEATURES</h5>
+    <h5>FIND US</h5>
 </footer>
 
 </html>

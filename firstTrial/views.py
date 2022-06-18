@@ -1,3 +1,6 @@
+from distutils.log import error
+from email import message
+from errno import ESTALE
 from django.shortcuts import render, HttpResponse, redirect
 from django.contrib import messages
 import json
@@ -8,6 +11,7 @@ import matplotlib
 matplotlib.use('Agg')
 from matplotlib import pyplot as plt
 import numpy as np
+import bcrypt
 
 
 
@@ -207,363 +211,480 @@ eighth_diagram_partFour = {
 
 
 def index(request):
-    return render(request, "index.html")
-
-def login(request):
-    if request.method == 'POST':   
-        caseNumber = request.POST['caseNumber']
-        if not caseNumber:
-            return render (request, "404.html")
-        else:
-            return redirect (f'/login/{caseNumber}')
-    return render(request, "index.html")
-
-def searchCase(request, case_number):
-    patient = Patient.objects.filter(caseNumber = case_number)
-    patient_to_view = patient[0]
-    if not patient:
-        return render (request, "404.html")
+    if "patient_id" not in request.session:
+        return render (request, "index.html")
     else:
-        return redirect(f"/submit/success/{patient_to_view.id}")
+        login_id = request.session['patient_id']
+        patient = Patient.objects.get(id=login_id)
+        context={
+            "patient": patient,
+        } 
+        return render(request, "index.html", context)
 
-def showform1(request):
+def not_found (request):
+    return render (request, '404.html')
+
+
+def registerpage(request):
     currentdate = datetime.date.today().strftime("%d/%b/%y")
-    
     context = {
         "today_date":currentdate,
         "default_date": datetime.date.today().strftime("%y-%d-%b"),
     }
-    return render(request, "form1.html", context)
+    return render(request, "patientRegister.html", context)
 
-def showform2(request, patient_id):
-    currentdate = datetime.date.today().strftime("%d/%b/%y")
-    new_patient = Patient.objects.get(id=patient_id)
-    context = {
-        "today_date":currentdate,
-        "default_date": datetime.date.today().strftime("%y-%d-%b"),
-        "patient":new_patient
-    }
-    return render(request, "form2.html", context)
-
-def showform3(request, patient_id):
-    currentdate = datetime.date.today().strftime("%d/%b/%y")
-    new_patient = Patient.objects.get(id=patient_id)
-    context = {
-        "today_date":currentdate,
-        "default_date": datetime.date.today().strftime("%y-%d-%b"),
-        "patient":new_patient
-    }
-    return render(request, "form3.html", context)
-
-def random_string():
-    return str(random.randint(10000, 99999))
-
-def newPatient(request):
-    if request.method == 'POST':
-        errors = Patient.objects.basic_validator(request.POST)
-        if len(errors) > 0:
-            for key, value in errors.items():
-                messages.error(request, value)
-            return redirect('/register')
-        else:
-            
+def patient_register(request):
+    errors = Patient.objects.register_validator(request.POST)
+    if len(errors):
+        for key, value in errors.items():
+            messages.error(request,value,key)
+        return redirect ("/register")
+    else:
+        if request.method == 'POST':
             new_patient = Patient.objects.create(
-                firstName = request.POST['firstName'],
-                lastName = request.POST['lastName'],
-                caseNumber = random_string(),
+                firstName = request.POST['firstName'].lower(),
+                lastName = request.POST['lastName'].lower(),
                 phone_number = request.POST['phone'],
                 email = request.POST['email'],
                 sex = request.POST['sex'],
                 date_of_birth = request.POST['date_of_birth'],
-            )
-            
-            return redirect(f"/register/{new_patient.id}")
-    return redirect("/register")
-
-def newPatient_sympton(request, patient_id):
-    new_patient = Patient.objects.get(id=patient_id)
-    if request.method == 'GET':
-        return redirect(f"/register/{new_patient.id}") 
-    if request.method == 'POST':
-        new_patient.sympton = request.POST['sympton']
-        new_patient.sweat = request.POST['sweat'] 
-        new_patient.sweatOther = request.POST['sweatOther']
-        new_patient.appetite = request.POST['appetite']
-        new_patient.appetiteOther = request.POST['appetiteOther']
-        new_patient.sleep = request.POST['sleep']
-        new_patient.sleepOther = request.POST['sleepOther']
-        new_patient.tinnitus = request.POST['tinnitus']
-        new_patient.tinnitusOther = request.POST['tinnitusOther']
-        new_patient.mouth = request.POST['mouth']
-        new_patient.mouthOther = request.POST['mouthOther']
-        new_patient.digestion = request.POST['digestion']
-        new_patient.digestionOther = request.POST['digestionOther']
-        new_patient.stool = request.POST['stool']
-        new_patient.stoolOther = request.POST['stoolOther']
-        new_patient.eyes = request.POST['eyes']
-        new_patient.eyesOther = request.POST['eyesOther']
-        new_patient.teeth = request.POST['teeth']
-        new_patient.teethOther = request.POST['teethOther']
-        new_patient.sexualActivities = request.POST['sexualActivities']
-        new_patient.sexualActivitiesOther = request.POST['sexualActivitiesOther']
-        new_patient.swelling = request.POST['swelling']
-        new_patient.swellingOther = request.POST['swellingOther']
-        new_patient.thirst = request.POST['thirst']
-        new_patient.thirstOther = request.POST['thirstOther']
-        new_patient.urine = request.POST['urine']
-        new_patient.urineOther = request.POST['urineOther']
-        new_patient.nose = request.POST['nose']
-        new_patient.noseOther = request.POST['noseOther']
-        new_patient.throat = request.POST['throat']
-        new_patient.throatOther = request.POST['throatOther']
-        new_patient.allergies = request.POST['allergies']
-        new_patient.save()
-        return redirect(f"/register/{new_patient.id}/img")
-
-def uploadTongue(request, patient_id):
-    new_patient = Patient.objects.get(id=patient_id)
-    if request.method == 'GET':
-        return redirect (f"/register/{new_patient.id}/img")
-    if request.method == 'POST':
-        new_patient.tongueCoat = request.FILES.get("uploadImg")
-        new_patient.save()
-        return redirect (f"/register/{new_patient.id}/img")
-
-def uploadLeftEye(request, patient_id):
-    new_patient = Patient.objects.get(id=patient_id)
-    if request.method == 'GET':
-        return redirect (f"/register/{new_patient.id}/img")
-    if request.method == 'POST':
-        new_patient.leftEye = request.FILES.get("uploadImg")
-        new_patient.save()
-        return redirect (f"/register/{new_patient.id}/img")
-
-def uploadRightEye(request, patient_id):
-    new_patient = Patient.objects.get(id=patient_id)
-    if request.method == 'GET':
-        return redirect (f"/register/{new_patient.id}/img")
-    if request.method == 'POST':
-        new_patient.rightEye = request.FILES.get("uploadImg")
-        new_patient.save()
-        return redirect (f"/register/{new_patient.id}/img")
-
-def uploadFace(request, patient_id):
-    new_patient = Patient.objects.get(id=patient_id)
-    if request.method == 'GET':
-        return redirect (f"/register/{new_patient.id}/img")
-    if request.method == 'POST':
-        new_patient.face = request.FILES.get("uploadImg")
-        new_patient.save()
-        return redirect (f"/register/{new_patient.id}/img")
-
-def uploadFiles(request, patient_id):
-    new_patient = Patient.objects.get(id=patient_id)
-    if request.method == 'GET':
-        return redirect (f"/register/{new_patient.id}/img")
-    if request.method == 'POST':
-        patientUploadFile = request.FILES.getlist("medicalRecord")
-        for oneFile in patientUploadFile:
-            PatientFiles.objects.create(
-                file = oneFile,
-                patient = new_patient
+                # hearUs = request.POST['hearUs'],
+                # referByFriend = request.POST['hearUsOther'],
+                # insurance = request.POST['insurance'],
+                # insuranceId = request.POST['insuranceId'],
+                password=bcrypt.hashpw(request.POST['password'].encode(), bcrypt.gensalt()).decode(),
                 )
-        new_patient.save()
-        return redirect (f"/register/{new_patient.id}/img")
+            request.session['patient_id'] = new_patient.id
+            return redirect (f"/dashboard")
+        else:
+            return redirect ("/register")
 
-def agreemenetCheck (request, patient_id):
-    new_patient = Patient.objects.get(id=patient_id)
+def loginpageE(request):
+    currentdate = datetime.date.today().strftime("%d/%b/%y")
+    context = {
+        "today_date":currentdate,
+        "default_date": datetime.date.today().strftime("%y-%d-%b"),
+    }
+    return render(request, "loginWithEmail.html", context)
+
+def loginpageP(request):
+    currentdate = datetime.date.today().strftime("%d/%b/%y")
+    context = {
+        "today_date":currentdate,
+        "default_date": datetime.date.today().strftime("%y-%d-%b"),
+    }
+    return render(request, "loginWithPhone.html", context)
+
+def login_By_E(request):
     if request.method == 'GET':
         return render (request, "404.html")
+    errors = Patient.objects.login_validator_byEmail(request.POST)
+    if len(errors):
+        for key, value in errors.items():
+            messages.error(request, value)
+        return redirect('/loginE')
+    else:
+        user = Patient.objects.filter(email=request.POST['email'])
+        patient = user[0]
+        request.session['patient_id'] = patient.id
+        return redirect(f'/dashboard')
+
+def login_By_P(request):
+    errors = Patient.objects.login_validator_byPhone(request.POST)
+
+    if len(errors):
+        for key, value in errors.items():
+            messages.error(request, value)
+        return redirect('/loginP')
+    else:
+        user = Patient.objects.filter(phone_number=request.POST['phone'])
+        patient = user[0]
+        request.session['patient_id'] = patient.id
+        return redirect(f'/dashboard')
+
+
+def view_dashboard(request):
+    if "patient_id" not in request.session:
+        return redirect('/')
+    else:
+        login_id = request.session['patient_id']
+        patient = Patient.objects.get(id=login_id)
+        context={
+            "patient": patient,
+            "patient_all_forms": PatientForm.objects.filter(patient=patient),
+        }
+        return render (request, "dashboard.html", context)
+
+
+# def patientLogin(request):
+#     if request.method == 'POST':   
+#         caseNumber = request.POST['caseNumber']
+#         if not caseNumber:
+#             return redirect("/not_found")
+#         else:
+#             return redirect (f'/login/{caseNumber}')
+#     return render(request, "index.html")
+
+# def searchCase(request, case_number):
+#     patient = Patient.objects.filter(caseNumber = case_number)
+#     patient_to_view = patient[0]
+#     if not patient:
+#         return render (request, "404.html")
+#     else:
+#         return redirect(f"/submit/success/{patient_to_view.id}")
+
+def new_patient_form(request, form_id):
+    if "patient_id" not in request.session:
+        return redirect('/not_found')
+    else:
+        new_form = PatientForm.objects.get(id=form_id)
+        currentdate = datetime.date.today().strftime("%d/%b/%y")
+        new_patient = Patient.objects.get(id=request.session['patient_id'])
+        context = {
+            "today_date":currentdate,
+            "default_date": datetime.date.today().strftime("%y-%d-%b"),
+            "patient":new_patient,
+            "form":new_form
+
+        }
+        # return render(request, "newPatientForm.html", context)
+        return render(request, "newPatientFormUploadFiles.html", context)
+
+# def form_upload_files(request, form_id, patient_id):
+#     if "patient_id" not in request.session:
+#         return redirect('/not_found')
+#     else:
+#         currentdate = datetime.date.today().strftime("%d/%b/%y")
+#         new_form = PatientForm.objects.get(id=form_id)
+#         new_patient = Patient.objects.get(id=patient_id)
+#         context = {
+#             "today_date":currentdate,
+#             "default_date": datetime.date.today().strftime("%y-%d-%b"),
+#             "patient":new_patient,
+#         }
+#         return render(request, "newPatientFormUploadFiles.html", context)
+
+def new_form(request):
+    if request.method == 'GET':
+        return redirect("/not_found") 
     if request.method == 'POST':
-        new_patient.agreementCheck = True
-        patient_phone = new_patient.phone_number
-        # getting patient phone last 3 dight, if somewhere is 0, we will move on to the perious dight
-        def find_last_Index():
-            for x in range(1,11,1):
-                if (patient_phone[len(patient_phone)-x] != "0"):
-                    return x
-        def find_second_Index():
-            for y in range(find_last_Index()+1,11,1):
-                if (patient_phone[len(patient_phone)-y] != "0"):
-                    return y
+        new_patient = Patient.objects.get(id=request.session['patient_id'])
+        currentdate = datetime.date.today().strftime("%d/%b/%y")
+        def random_string():
+                return str(random.randint(10000, 99999))
+        new_form = PatientForm.objects.create(
+            caseNumber = random_string(),
+            # sympton = request.POST['sympton'],
+            # sweat = request.POST['sweat'],
+            # sweatOther = request.POST['sweatOther'],
+            # appetite = request.POST['appetite'],
+            # appetiteOther = request.POST['appetiteOther'],
+            # sleep = request.POST['sleep'],
+            # sleepOther = request.POST['sleepOther'],
+            # tinnitus = request.POST['tinnitus'],
+            # tinnitusOther = request.POST['tinnitusOther'],
+            # mouth = request.POST['mouth'],
+            # mouthOther = request.POST['mouthOther'],
+            # digestion = request.POST['digestion'],
+            # digestionOther = request.POST['digestionOther'],
+            # stool = request.POST['stool'],
+            # stoolOther = request.POST['stoolOther'],
+            # eyes = request.POST['eyes'],
+            # eyesOther = request.POST['eyesOther'],
+            # teeth = request.POST['teeth'],
+            # teethOther = request.POST['teethOther'],
+            # sexualActivities = request.POST['sexualActivities'],
+            # sexualActivitiesOther = request.POST['sexualActivitiesOther'],
+            # swelling = request.POST['swelling'],
+            # swellingOther = request.POST['swellingOther'],
+            # thirst = request.POST['thirst'],
+            # thirstOther = request.POST['thirstOther'],
+            # urine = request.POST['urine'],
+            # urineOther = request.POST['urineOther'],
+            # nose = request.POST['nose'],
+            # noseOther = request.POST['noseOther'],
+            # throat = request.POST['throat'],
+            # throatOther = request.POST['throatOther'],
+            # allergies = request.POST['allergies'],
+            patient = new_patient
+        )
+        return redirect (f"/newform/{new_form.id}/new")
 
-        def find_first_Index():
-            for z in range(find_second_Index()+1,11,1):
-                if (patient_phone[len(patient_phone)-z] != "0"):
-                    return z
+def uploadTongue(request, form_id):
+    if "patient_id" not in request.session:
+        return redirect('/not_found')
+    else:
+        form = PatientForm.objects.get(id=form_id)
+        if request.method == 'POST':
+            form.tongueCoat = request.FILES.get("uploadImg")
+            form.save()
+            return redirect (f"/newform/{form.id}/new")
+        else:
+            return redirect("/not_found")
 
-        secondIndex = patient_phone[len(patient_phone)-find_second_Index()]
-        firstIndex = patient_phone[len(patient_phone)-find_first_Index()]
-        lastIndex = patient_phone[len(patient_phone)-find_last_Index()]
+def uploadLeftEye(request, form_id):
+    if "patient_id" not in request.session:
+        return redirect('/not_found')
+    else:
+        form = PatientForm.objects.get(id=form_id)
+        if request.method == 'POST':
+            form.leftEye = request.FILES.get("uploadImg")
+            form.save()
+            return redirect (f"/newform/{form.id}/new")
+        else:
+            return redirect("/not_found")
 
-        # assign different diagram with different number in specific index
-        # may remove as only the result will be needed
-        def diagnosis_first_index():
-            if (firstIndex == "1") or (firstIndex == "9"):
-                first_diagnosis = first_diagram_partOne
-                return first_diagnosis
-            if firstIndex == "2":
-                first_diagnosis = second_diagram_partOne
-                return first_diagnosis
-            if firstIndex == "3":
-                first_diagnosis = third_diagram_partOne
-                return first_diagnosis
-            if firstIndex == "4":
-                first_diagnosis = fourth_diagram_partOne
-                return first_diagnosis
-            if firstIndex == "5":
-                first_diagnosis = fifth_diagram_partOne
-                return first_diagnosis
-            if firstIndex == "6":
-                first_diagnosis = sixth_diagram_partOne
-                return first_diagnosis
-            if firstIndex == "7":
-                first_diagnosis = seventh_diagram_partOne
-                return first_diagnosis
-            if firstIndex == "8":
-                first_diagnosis = eighth_diagram_partOne
-                return first_diagnosis
-        
-        
-        def diagnosis_second_index(): 
-            if (secondIndex == "1") or (secondIndex == "9"):
-                second_diagnosis = first_diagram_partTwo
-                return second_diagnosis
-            if secondIndex == "2":
-                second_diagnosis = second_diagram_partTwo
-                return second_diagnosis
-            if secondIndex == "3":
-                second_diagnosis = third_diagram_partTwo
-                return second_diagnosis
-            if secondIndex == "4":
-                second_diagnosis = fourth_diagram_partTwo
-                return second_diagnosis
-            if secondIndex == "5":
-                second_diagnosis = fifth_diagram_partTwo
-                return second_diagnosis
-            if secondIndex == "6":
-                second_diagnosis = sixth_diagram_partTwo
-                return second_diagnosis
-            if secondIndex == "7":
-                second_diagnosis = seventh_diagram_partTwo
-                return second_diagnosis
-            if secondIndex == "8":
-                second_diagnosis = eighth_diagram_partTwo
-                return second_diagnosis
-        
-        def diagnosis2_first_index():
-            if (lastIndex == "1") or (lastIndex == "9"):
-                third_diagnosis = first_diagram_partThree
-                return third_diagnosis
-            if (lastIndex == "2"):
-                third_diagnosis = second_diagram_partThree
-                return third_diagnosis
-            if (lastIndex == "3"):
-                third_diagnosis = third_diagram_partThree
-                return third_diagnosis
-            if (lastIndex == "4"):
-                third_diagnosis = fourth_diagram_partThree
-                return third_diagnosis
-            if (lastIndex == "5"):
-                third_diagnosis = fifth_diagram_partThree
-                return third_diagnosis
-            if (lastIndex == "6"):
-                third_diagnosis = sixth_diagram_partThree
-                return third_diagnosis
-            if (lastIndex == "7"):
-                third_diagnosis = seventh_diagram_partThree
-                return third_diagnosis
-            if (lastIndex == "8"):
-                third_diagnosis = eighth_diagram_partThree
-                return third_diagnosis
+def uploadRightEye(request, form_id):
+    if "patient_id" not in request.session:
+        return redirect('/not_found')
+    else:
+        form = PatientForm.objects.get(id=form_id)
+        if request.method == 'POST':
+            form.rightEye = request.FILES.get("uploadImg")
+            form.save()
+            return redirect (f"/newform/{form.id}/new")
+        else:
+            return redirect("/not_found")
 
-        def diagnosis2_second_index():
-            if (secondIndex == "1") or (secondIndex == "9"):
-                fourth_diagnosis = first_diagram_partFour
-                return fourth_diagnosis
-            if secondIndex == "2":
-                fourth_diagnosis = second_diagram_partFour
-                return fourth_diagnosis
-            if secondIndex == "3":
-                fourth_diagnosis = third_diagram_partFour
-                return fourth_diagnosis
-            if secondIndex == "4":
-                fourth_diagnosis = fourth_diagram_partFour
-                return fourth_diagnosis
-            if secondIndex == "5":
-                fourth_diagnosis = fifth_diagram_partFour
-                return fourth_diagnosis
-            if secondIndex == "6":
-                fourth_diagnosis = sixth_diagram_partFour
-                return fourth_diagnosis
-            if secondIndex == "7":
-                fourth_diagnosis = seventh_diagram_partFour
-                return fourth_diagnosis
-            if secondIndex == "8":
-                fourth_diagnosis = eighth_diagram_partFour
-                return fourth_diagnosis
+def uploadFace(request, form_id):
+    if "patient_id" not in request.session:
+        return redirect('/not_found')
+    else:
+        form = PatientForm.objects.get(id=form_id)
+        if request.method == 'POST':
+            form.face = request.FILES.get("uploadImg")
+            form.save()
+            return redirect (f"/newform/{form.id}/new")
+        else:
+            return redirect("/not_found")
 
-        # specify the initial diagram to modify
-        # initial_diagnosis = json.dumps(diagnosis_first_index())[1:-1]+" "+json.dumps(diagnosis_second_index())[1:-1] + " " + json.dumps(diagnosis2_first_index())[1:-1] + " " + json.dumps(diagnosis2_second_index())[1:-1]
-        result1 = Merge(diagnosis_first_index(),diagnosis_second_index())
-        result2 = Merge(diagnosis2_first_index(), diagnosis2_second_index())
-        initial_statement = Merge(result1,result2)
-        new_patient.diagnosisInitial = json.dumps(initial_statement)
-        new_patient.save()
-        return redirect (f"/submit/success/{new_patient.id}")
+def uploadFiles(request, form_id):
+    if "patient_id" not in request.session:
+        return redirect('/not_found')
+    else:
+        patient = Patient.objects.get(id=request.session['patient_id'])
+        form = PatientForm.objects.get(id=form_id)
+        if request.method == 'POST':
+            patientUploadFile = request.FILES.getlist("medicalRecord")
+            for oneFile in patientUploadFile:
+                PatientFiles.objects.create(
+                    file = oneFile,
+                    patient = patient
+                    )
+            return redirect (f"/newform/{form.id}/new")
+        else:
+            return redirect("/not_found")
 
-def submit_success(request, patient_id):
-    context={
-        "patient": Patient.objects.get(id=patient_id)
-    }
-    return render(request, "success.html", context)
+def agreementDisable (request, form_id, patient_id):
+    new_patient = Patient.objects.get(id=patient_id)
+    form = PatientForm.objects.get(id=form_id)
+    form.agreementCheck = False
+    form.save()
+    return redirect (f"/patient/{new_patient.id}/detial")
 
-def formSubmit(request, patient_id):
-    context={
-        "patient": Patient.objects.get(id=patient_id)
-    }
-    return render(request, "success.html", context)
+
+def agreemenetCheck (request, form_id):
+    if "patient_id" not in request.session:
+        return redirect('/not_found')
+    else:
+        new_patient = Patient.objects.get(id=request.session['patient_id'])
+        form = PatientForm.objects.get(id=form_id)
+        if request.method == 'GET':
+            return redirect('/not_found')
+        if request.method == 'POST':
+            form.agreementCheck = True
+            patient_phone = new_patient.phone_number
+            # getting patient phone last 3 dight, if somewhere is 0, we will move on to the perious dight
+            def find_last_Index():
+                for x in range(1,11,1):
+                    if (patient_phone[len(patient_phone)-x] != "0"):
+                        return x
+            def find_second_Index():
+                for y in range(find_last_Index()+1,11,1):
+                    if (patient_phone[len(patient_phone)-y] != "0"):
+                        return y
+
+            def find_first_Index():
+                for z in range(find_second_Index()+1,11,1):
+                    if (patient_phone[len(patient_phone)-z] != "0"):
+                        return z
+
+            secondIndex = patient_phone[len(patient_phone)-find_second_Index()]
+            firstIndex = patient_phone[len(patient_phone)-find_first_Index()]
+            lastIndex = patient_phone[len(patient_phone)-find_last_Index()]
+
+            # assign different diagram with different number in specific index
+            # may remove as only the result will be needed
+            def diagnosis_first_index():
+                if (firstIndex == "1") or (firstIndex == "9"):
+                    first_diagnosis = first_diagram_partOne
+                    return first_diagnosis
+                if firstIndex == "2":
+                    first_diagnosis = second_diagram_partOne
+                    return first_diagnosis
+                if firstIndex == "3":
+                    first_diagnosis = third_diagram_partOne
+                    return first_diagnosis
+                if firstIndex == "4":
+                    first_diagnosis = fourth_diagram_partOne
+                    return first_diagnosis
+                if firstIndex == "5":
+                    first_diagnosis = fifth_diagram_partOne
+                    return first_diagnosis
+                if firstIndex == "6":
+                    first_diagnosis = sixth_diagram_partOne
+                    return first_diagnosis
+                if firstIndex == "7":
+                    first_diagnosis = seventh_diagram_partOne
+                    return first_diagnosis
+                if firstIndex == "8":
+                    first_diagnosis = eighth_diagram_partOne
+                    return first_diagnosis
+            
+            
+            def diagnosis_second_index(): 
+                if (secondIndex == "1") or (secondIndex == "9"):
+                    second_diagnosis = first_diagram_partTwo
+                    return second_diagnosis
+                if secondIndex == "2":
+                    second_diagnosis = second_diagram_partTwo
+                    return second_diagnosis
+                if secondIndex == "3":
+                    second_diagnosis = third_diagram_partTwo
+                    return second_diagnosis
+                if secondIndex == "4":
+                    second_diagnosis = fourth_diagram_partTwo
+                    return second_diagnosis
+                if secondIndex == "5":
+                    second_diagnosis = fifth_diagram_partTwo
+                    return second_diagnosis
+                if secondIndex == "6":
+                    second_diagnosis = sixth_diagram_partTwo
+                    return second_diagnosis
+                if secondIndex == "7":
+                    second_diagnosis = seventh_diagram_partTwo
+                    return second_diagnosis
+                if secondIndex == "8":
+                    second_diagnosis = eighth_diagram_partTwo
+                    return second_diagnosis
+            
+            def diagnosis2_first_index():
+                if (lastIndex == "1") or (lastIndex == "9"):
+                    third_diagnosis = first_diagram_partThree
+                    return third_diagnosis
+                if (lastIndex == "2"):
+                    third_diagnosis = second_diagram_partThree
+                    return third_diagnosis
+                if (lastIndex == "3"):
+                    third_diagnosis = third_diagram_partThree
+                    return third_diagnosis
+                if (lastIndex == "4"):
+                    third_diagnosis = fourth_diagram_partThree
+                    return third_diagnosis
+                if (lastIndex == "5"):
+                    third_diagnosis = fifth_diagram_partThree
+                    return third_diagnosis
+                if (lastIndex == "6"):
+                    third_diagnosis = sixth_diagram_partThree
+                    return third_diagnosis
+                if (lastIndex == "7"):
+                    third_diagnosis = seventh_diagram_partThree
+                    return third_diagnosis
+                if (lastIndex == "8"):
+                    third_diagnosis = eighth_diagram_partThree
+                    return third_diagnosis
+
+            def diagnosis2_second_index():
+                if (secondIndex == "1") or (secondIndex == "9"):
+                    fourth_diagnosis = first_diagram_partFour
+                    return fourth_diagnosis
+                if secondIndex == "2":
+                    fourth_diagnosis = second_diagram_partFour
+                    return fourth_diagnosis
+                if secondIndex == "3":
+                    fourth_diagnosis = third_diagram_partFour
+                    return fourth_diagnosis
+                if secondIndex == "4":
+                    fourth_diagnosis = fourth_diagram_partFour
+                    return fourth_diagnosis
+                if secondIndex == "5":
+                    fourth_diagnosis = fifth_diagram_partFour
+                    return fourth_diagnosis
+                if secondIndex == "6":
+                    fourth_diagnosis = sixth_diagram_partFour
+                    return fourth_diagnosis
+                if secondIndex == "7":
+                    fourth_diagnosis = seventh_diagram_partFour
+                    return fourth_diagnosis
+                if secondIndex == "8":
+                    fourth_diagnosis = eighth_diagram_partFour
+                    return fourth_diagnosis
+
+            # specify the initial diagram to modify
+            # initial_diagnosis = json.dumps(diagnosis_first_index())[1:-1]+" "+json.dumps(diagnosis_second_index())[1:-1] + " " + json.dumps(diagnosis2_first_index())[1:-1] + " " + json.dumps(diagnosis2_second_index())[1:-1]
+            result1 = Merge(diagnosis_first_index(),diagnosis_second_index())
+            result2 = Merge(diagnosis2_first_index(), diagnosis2_second_index())
+            initial_statement = Merge(result1,result2)
+            form.diagnosisInitial = json.dumps(initial_statement)
+            form.save()
+            new_patient.save()
+            return redirect (f"/submit/success/{form.id}")
+
+def submit_success(request, form_id):
+    if "patient_id" not in request.session:
+        return redirect('/not_found')
+    else:
+        context={
+            "patient": Patient.objects.get(id=request.session['patient_id']),
+            "form": PatientForm.objects.get(id=form_id)
+        }
+        return render(request, "success.html", context)
+
+def check_form(request, form_id):
+    if "patient_id" not in request.session:
+        return redirect('/not_found')
+    else:
+        form = PatientForm.objects.get(id=form_id)
+        if form.agreementCheck == False:
+            return redirect (f"/submit/success/{form.id}")
+        if form.question == False:
+            return (f"/patient/{form.id}/QA")
+        else:
+            return redirect (f"/patient/{form.id}/seeResult/page")
+
+# def formSubmit(request, patient_id):
+#     context={
+#         "patient": Patient.objects.get(id=patient_id)
+#     }
+#     return render(request, "success.html", context)
 
 def host_portal_newest(request):
     context={
         "all_patients": Patient.objects.all(),
-        "no_diagnosis_patients": Patient.objects.exclude(diagnosis='True')
+        # "no_diagnosis_patients": Patient.objects.exclude(diagnosis='True')
     }
     return render(request, "host.html", context)
 
 def host_portal_oldest(request):
     context={
         "all_patients": Patient.objects.order_by("-created_at"),
-        "no_diagnosis_patients": Patient.objects.exclude(diagnosis='True')
+        
     }
     return render(request, "host.html", context)
 
 def host_portal_sortby_caseNumber_ascending(request):
     context={
         "all_patients": Patient.objects.order_by("caseNumber"),
-        "no_diagnosis_patients": Patient.objects.exclude(diagnosis='True')
+        
     }
     return render(request, "host.html", context)
 
 def host_portal_sortby_caseNumber_descending(request):
     context={
         "all_patients": Patient.objects.order_by("-caseNumber"),
-        "no_diagnosis_patients": Patient.objects.exclude(diagnosis='True')
     }
     return render(request, "host.html", context)
 
-def verify_patient(request, patient_id):
-    patient = Patient.objects.get(id=patient_id)
-    patient.verifyStatus = True
-    patient.save()
-    return redirect(f"/host")
-
-def verifyDetail_patient(request, patient_id):
-    patient = Patient.objects.get(id=patient_id)
-    status_to_change = patient.verifyStatus
-    patient.verifyStatus = not status_to_change
-    patient.save()
-    return redirect(f"/patient/{patient.id}/detial")
 
 def delete_patient(request, patient_id):
     patient_to_delete = Patient.objects.get(id=patient_id)
@@ -575,21 +696,23 @@ def Merge(dict1, dict2):
     d.update(dict2)
     return d  
 
-def diagnosis(request, patient_id):
+def view_patient_detail(request, patient_id):
     patient_to_view = Patient.objects.get(id=patient_id)
     context = {
         "patient": patient_to_view,
+        "patient_all_forms": PatientForm.objects.filter(patient=patient_to_view),
     }
     return render (request, "patient.html", context)
 
 
-def seeResult(request, patient_id):
-    patient_to_view = Patient.objects.get(id=patient_id)
+def seeResult(request, form_id):
+    patient_to_view = Patient.objects.get(id=request.session['patient_id'])
     patient_phone = patient_to_view.phone_number
+    form = PatientForm.objects.get(id=form_id)
     if request.method == 'GET':
         context={
             "patient": patient_to_view,
-            "final_diagnosis": patient_to_view.diagnosisResult
+            "final_diagnosis": form.diagnosisResult
         }
         return render (request, "seeResult.html", context)
     if request.method == 'POST':
@@ -850,44 +973,84 @@ def seeResult(request, patient_id):
         # ax1.axis('equal') 
         # plt.savefig('media/diagnosis/3070.png',dpi=100)
         patient_status_dict = Merge(result1, result2)
-        patient_to_view.diagnosisResult = json.dumps(patient_status_dict)
-        patient_to_view.diagnosis = True
+        form.diagnosisResult = json.dumps(patient_status_dict)
+        form.diagnosis = True
+        form.save()
         patient_to_view.save()
-        return redirect (f"/patient/{patient_to_view.id}/seeResult/page")
+        return redirect (f"/patient/{form.id}/QA")
 
-def seeResultPage (request, patient_id):
-    diagnosis_patient = Patient.objects.get(id=patient_id)
-    # patient_phone = diagnosis_patient.phone_number
-    # def find_last_Index():
-    #     for x in range(1,11,1):
-    #         if (patient_phone[len(patient_phone)-x] != "0"):
-    #             return x
-    # def find_second_Index():
-    #     for y in range(find_last_Index()+1,11,1):
-    #         if (patient_phone[len(patient_phone)-y] != "0"):
-    #             return y
-    # def find_first_Index():
-    #     for z in range(find_second_Index()+1,11,1):
-    #         if (patient_phone[len(patient_phone)-z] != "0"):
-    #             return z
+def seeResultPage (request, form_id):
+    if "patient_id" not in request.session:
+            return redirect('/not_found')
+    else:
+        form = PatientForm.objects.get(id=form_id)
+        if form.question == False:
+            return redirect("/patient/{form.id}/{patient_to_view.id}/QA")
+        else:
+            diagnosis_patient = Patient.objects.get(id=request.session['patient_id'])
+            patient_initial_status_dict = json.loads(form.diagnosisInitial)
+            patient_status_dict = json.loads(form.diagnosisResult)
+            initialLung = patient_initial_status_dict.get("lung")
+            lung = patient_status_dict.get("lung")  
+            initialPericardium = patient_initial_status_dict.get("pericardium")
+            pericardium = patient_status_dict.get("pericardium")
+            initialHeart = patient_initial_status_dict.get("heart")
+            heart = patient_status_dict.get("heart")
+            initialStomach = patient_initial_status_dict.get("stomach")
+            stomach = patient_status_dict.get("stomach")
+            initialGallbladder = patient_initial_status_dict.get("gallbladder")
+            gallbladder = patient_status_dict.get("gallbladder")
+            initialUrinaryBladder = patient_initial_status_dict.get("urinaryBladder")
+            urinaryBladder = patient_status_dict.get("urinaryBladder")
+            initialSpleen = patient_initial_status_dict.get("spleen")
+            spleen = patient_status_dict.get("spleen")
+            initialLiver = patient_initial_status_dict.get("liver")
+            liver = patient_status_dict.get("liver")
+            initialKidney = patient_initial_status_dict.get("kidney")
+            kidney = patient_status_dict.get("kidney")
+            initialLarge_intestine = patient_initial_status_dict.get("large intestine")
+            large_intestine = patient_status_dict.get("large intestine")
+            initialSan_jiao = patient_initial_status_dict.get("san jiao")
+            san_jiao = patient_status_dict.get("san jiao")
+            initialSmall_intestine = patient_initial_status_dict.get("small intestine")
+            small_intestine = patient_status_dict.get("small intestine")
+            context={
+                    "patient": diagnosis_patient,
+                    "lung": lung,
+                    "initialLung": initialLung,
+                    "pericardium": pericardium,
+                    "initialPericardium":initialPericardium,
+                    "heart": heart,
+                    "initialHeart":initialHeart,
+                    "stomach": stomach,
+                    "initialStomach":initialStomach,
+                    "gallbladder": gallbladder,
+                    "initialGallbladder":initialGallbladder,
+                    "urinaryBladder": urinaryBladder,
+                    "initialUrinaryBladder": initialUrinaryBladder,
+                    "spleen": spleen,
+                    "initialSpleen":initialSpleen,
+                    "liver": liver,
+                    "initialLiver":initialLiver,
+                    "kidney":kidney,
+                    "initialKidney":initialKidney,
+                    "large_intestine": large_intestine,
+                    "initialLarge_intestine":initialLarge_intestine,
+                    "san_jiao":san_jiao,
+                    "initialSan_jiao":initialSan_jiao,
+                    "small_intestine": small_intestine,
+                    "initialSmall_intestine":initialSmall_intestine,
+                    "patient_status_dict":patient_status_dict,
+                    "form":form,
+                }
+            return render (request, "seeResult.html", context)
 
-    # lastIndex = patient_phone[len(patient_phone)-find_last_Index()]
-    # secondIndex = patient_phone[len(patient_phone)-find_second_Index()]
-    # firstIndex = patient_phone[len(patient_phone)-find_first_Index()]
+def seeIndexResultPage (request, form_id):
+    diagnosis_patient = Patient.objects.get(id=request.session['patient_id'])
+    form = PatientForm.objects.get(id=form_id)
+    patient_initial_status_dict = json.loads(form.diagnosisInitial)
+    patient_status_dict = json.loads(form.diagnosisResult)
 
-    
-
-    patient_initial_status_dict = json.loads(diagnosis_patient.diagnosisInitial)
-    patient_status_dict = json.loads(diagnosis_patient.diagnosisResult)
-    # common_pairs = dict()
-    # def findDifference(dictionary1, dictionary2):
-    #     for key in dictionary1:
-    #         if (key in dictionary2 and dictionary1[key] != dictionary2[key]):
-    #             common_pairs[key] = dictionary1[key]
-        
-    #     return common_pairs
-    # difference = json.dumps(findDifference(patient_initial_status_dict,patient_status_dict))
-    
     initialLung = patient_initial_status_dict.get("lung")
     lung = patient_status_dict.get("lung")
     
@@ -950,8 +1113,21 @@ def seeResultPage (request, patient_id):
             "initialSan_jiao":initialSan_jiao,
             "small_intestine": small_intestine,
             "initialSmall_intestine":initialSmall_intestine,
-
             "patient_status_dict":patient_status_dict,
-            
+            "form":form
         }
-    return render (request, "seeResult.html", context)
+    return render (request, "patientQuestion.html", context)
+
+def question_complete(request, form_id):
+    if "patient_id" not in request.session:
+            return redirect('/not_found')
+    else:
+        patient = Patient.objects.get(id=request.session['patient_id'])
+        form = PatientForm.objects.get(id=form_id)
+        form.question = True
+        form.save()
+        return redirect (f"/patient/{form.id}/seeResult/page")
+
+def logout (request):
+    request.session.flush()
+    return redirect('/')

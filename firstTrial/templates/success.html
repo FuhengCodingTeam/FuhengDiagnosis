@@ -15,40 +15,90 @@
 </head>
 
 <body>
-    <header>
-        <h2>Welcome to A.I. Diagnosis</h2>
-        <div class="row align-items-center">
-            <a class="col-md-auto" href="/">Home</a>
-            <a class="col-md-auto" href="">How it Works</a>
-            <a class="col-md-auto" href="">Contact Us</a>
-
+    <header class="index2">
+        <h2 style="padding-left: 100px; color: white;">
+            MAISHEN® A.I. DIAGNOSIS <br><br> 脉神®人工智能诊断系统
+        </h2>
+        <div class="nav home dark" style="padding-top: 50px; width: 47%; margin-left: -15%;">
+            <a class="btn" href="/">
+                <h5> Home <br> 主页</h5>
+            </a>
+            <a class="btn" href="#">
+                <h5>Blog <br> 更新</h5>
+            </a>
+            <a class="btn" href="#">
+                <h5>About Us <br> 关于我们</h5>
+            </a>
+            <a class="btn" href="#">
+                <h5>How it works <br> 诊断系统</h5>
+            </a>
+            <a class="btn" href="#">
+                <h5>Career <br> 加入我们</h5>
+            </a>
+        </div>
+        <div class="row align-items-center" style="padding-right:100px ;">
+            <a style="color: black; text-decoration: none; box-shadow: 5px 10px 5px #ffc10778;" class="col-md-auto btn btn-warning" href="/logout">Logout <br> 登出 </a>
         </div>
     </header>
-    <div class="wrapper">
+    <div class="container-fluid register" style="padding-top: 240px; height: auto;">
         <div id="info" style="display: block;">
+            <h3>Patient: {{patient.firstName}} {{patient.lastName}} </h3>
+            <h3>Case Number: <span>{{form.caseNumber}}</span></h3>
+        </div>
+        {% if patient.patientFile %}
+        <center class="patientFileFeild">
+
+            <!--  -->
+            <h5>File Upload <br> 上传的文件 </h5>
+
+            {% for file in patient.patientFile.all %}
+            <p>
+                <a href="{{file.file.url}}">{{file.file}}</a> <br> Uploaded on: {{file.created_at|date:"M/d/Y"}}
+            </p>
+            <!--  -->
+            {% endfor %}
+        </center>
+        {% endif %}
+        <div class="patientImgFeild">
             <center>
-                <h3>Patient: {{patient.firstName}} {{patient.lastName}} </h3>
-                <h3>Case Number: <span>{{patient.caseNumber}}</span></h3>
-                <a class="btn btn-primary" href="">Send your diagnosis to your email</a>
+                {% if form.tongueCoat %}
+                <p>Tongue Coat <br> 舌苔 </p>
+                <img src="{{form.tongueCoat.url}}" alt="" style="height:200px ; width: 200px;"> {% endif %}
             </center>
+            <center>
+                {% if form.leftEye %}
+                <p>Left Eye <br> 左眼 </p>
+                <img src="{{form.leftEye.url}}" alt="" style="height:200px ; width: 200px;"> {% endif %}
+            </center>
+            <center>
+                {% if form.rightEye %}
 
-
-
+                <p>Right Eye <br> 右眼 </p>
+                <img src="{{form.rightEye.url}}" alt="" style="height:200px ; width: 200px;"> {% endif %}
+            </center>
+            <center>
+                {% if form.face %}
+                <p>Face <br> 脸部 </p>
+                <img src="{{form.face.url}}" alt="" style="height:200px ; width: 200px;"> {% endif %}
+            </center>
         </div>
 
-        {% if not patient.diagnosisResult %}
+        {% if not form.diagnosisResult %}
         <!--  -->
-        {% if patient.agreementCheck == False %}
-        <div class="form2-1">
+        {% if form.agreementCheck == False %}
+        <div class="" style="padding:30px">
             <h4>Before you start A.I.Diagnosis</h4>
             <h5>Please carefully review the instruction and terms agreements</h5>
-            <form action="/agreementCheck/{{patient.id}}" method="POST">
+
+            <form action="/agreementCheck/{{form.id}}" method="POST">
                 {% csrf_token %}
                 <h4>Instruction</h4>
-                <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Fugit impedit cum dicta commodi laboriosam libero quos quidem culpa harum possimus, nemo nisi eaque quas, minus rem a placeat tenetur odio.</p>
-                <input type="checkbox" name="agreementCheck" id="agreementCheck" value="T" onchange="document.getElementById('submit').disabled = !this.checked;">
-                <label for="agreementCheck">By checking this ...</label>
-                <button type="submit" class="btn btn-primary" id="submit" disabled>Submit</button>
+                <p style="width:99%; height:400px; border:1px dotted black; padding: 30px;">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Fugit impedit cum dicta commodi laboriosam libero quos quidem culpa harum possimus, nemo nisi eaque quas, minus rem a placeat tenetur odio.</p>
+                <div style="text-align:center ;">
+                    <input type="checkbox" name="agreementCheck" id="agreementCheck" value="T" onchange="document.getElementById('submit').disabled = !this.checked;">
+                    <label for="agreementCheck">By checking this ...</label>
+                    <button type="submit" class="btn btn-primary" id="submit" disabled>Submit</button>
+                </div>
             </form>
         </div>
         {% else %}
@@ -64,10 +114,11 @@
                         clearInterval(id);
                         document.getElementById("show-result").style.display = "block";
                         document.getElementById("diaMessage").style.display = "none";
+                        document.getElementById("diaSpin").style.display = "none";
                         document.getElementById("diaComplete").style.display = "block";
-                        document.getElementById("info").style.display = "block";
                         document.getElementById("diaImg1").style.display = "none";
                         document.getElementById("diaImg2").style.display = "block";
+
 
                         // set page to auto redirect to new page
                         setTimeout(function() {
@@ -79,53 +130,57 @@
                         document.getElementById("progress").innerHTML = width * 1 + '%';
                         document.getElementById("diaButton").style.display = "none";
                         document.getElementById("diaMessage").style.display = "block";
-                        document.getElementById("info").style.display = "none";
+                        document.getElementById("diaSpin").style.display = "block";
                         document.getElementById("diaImg1").style.display = "block";
+
 
                     }
                 }
             }
         </script>
 
-        <div class="form2-1">
-            <center id="diaImg1" style="display: none;">
-                <img src="/media/systemPhotos/warning.png" alt="">
+        <div class="diagnosis" style="padding-top: 100px;">
+            <center id="diaMessage" style="display: none;">
+                <h3>Do Not Close or Refreash the Broswer!! </h3>
+                <h3>Your diagnosis is in progressing.</h3>
+                <h3>请不要关闭浏览器或者刷新页面</h3>
+                <h3>系统正在对您进行诊断</h3>
+            </center>
+            <center id="diaImg1" style="display: none; ">
+                <img src="/media/systemPhotos/warning.png" style="height: 320px; width: 320px;" alt="">
             </center>
             <center id="diaImg2" style="display: none;">
                 <img src="/media/systemPhotos/success.png" style="height: 320px; width: 320px;" alt="">
             </center>
-            <h5>Patient:</h5>
-            <h6>Review your information</h6>
-            <br>
-            <center>
-                <button class="btn btn-warning" id="diaButton" onclick="move()">Start Diagnosis</button>
-            </center>
-            <br>
-            <div class="" style="background-color: rgba(232, 232, 232, 0.735);">
-                <div id="progressBar" class="progress-bar progress-bar-striped progress-bar-animated" style="height:30px;width:0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+            <div class="" style="height:173px;">
+                <br>
+                <center>
+                    <button class="btn btn-warning" id="diaButton" onclick="move()">Start Diagnosis <br> 开始诊断</button>
+                </center>
+                <br>
+
+                <div id="progressBar" class="progress-bar progress-bar-striped progress-bar-animated" style="height:60px;width:0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
                     <p id="progress">0%</p>
                 </div>
             </div>
             <center>
-                <div id="diaMessage" style="display: none;">
-                    <h4>Do Not Close or Refreash the Broswer!! </h4>
-                    <h4>Your diagnosis is in progressing.</h4>
+                <div id="diaSpin" style="display: none;">
                     <br>
-                    <div class="spinner-border text-primary" role="status">
+                    <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
                         <span class="visually-hidden">Loading...</span>
                     </div>
-                    <strong id="diaComplete" style="display: none;">Complete!</strong>
+                    <strong id="diaComplete" style="display: none;">Complete! <br> 完成！</strong>
                 </div>
 
                 <div id="show-result" style="display:none">
-                    <h4>Your diagnosis result is Completed! </h4>
+                    <h4>Your diagnosis result is Almost Completed <br> 您的诊断就快完成了，请稍后</h4>
                     <h4>Loading your result...Please wait</h4>
                     <h5>Page not reload?
-                        <a href="/patient/{{patient.id}}/seeResult/page">click here to view your result</a>
+                        <a href="/patient/{{form.id}}/QA">Click here to view your result <br> 点击下一步</a>
                     </h5>
                 </div>
             </center>
-            <form id="diaForm" action="/patient/{{patient.id}}/seeResult" method="POST">
+            <form id="diaForm" action="/patient/{{form.id}}/seeResult" method="POST">
                 {% csrf_token %}
                 <button class="btn btn-success" style="display: none;">See Result</button>
             </form>
@@ -135,9 +190,9 @@
             {% else %}
             <p>See result</p>
             <script>
-                window.location.replace("/patient/{{patient.id}}/seeResult/page")
+                window.location.replace("/patient/{{form.id}}/QA")
             </script>
-            <a href="/patient/{{patient.id}}/seeResult/page">See result</a>
+            <a href="/patient/{{form.id}}/QA">See result</a>
             <!--  -->
             {% endif %}
         </div>
