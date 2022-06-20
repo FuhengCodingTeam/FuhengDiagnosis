@@ -2,6 +2,10 @@ from django.urls import path
 from . import views 
 urlpatterns = [
     # main page
+    path('develop', views.request_password),
+    path('submit/developer', views.submit_password),
+    path('page/not/ready', views.not_correct),
+    path('verify',views.notice),
     path('', views.index),
     # path('search/<str:case_number>', views.searchCase),
     # patient register
@@ -20,8 +24,6 @@ urlpatterns = [
     path('login/email', views.login_By_E),
     path('login/phone', views.login_By_P),
 
-    
-    
     # patient submit newform and upload files
     path('newform/<int:form_id>/new', views.new_patient_form),
     path('newform/<int:form_id>/tongue', views.uploadTongue),
@@ -36,11 +38,9 @@ urlpatterns = [
     # login as host that can diagnosis, view patient detail, and delete patient, may need password
     path('host', views.host_portal_newest),
     path('host/oldest', views.host_portal_oldest),
-    path('host/sortCaseNumber/Ascending',views.host_portal_sortby_caseNumber_ascending),
-    path('host/sortCaseNumber/Decending',views.host_portal_sortby_caseNumber_descending),
     path('patient/<int:patient_id>/delete', views.delete_patient),
     path('patient/<int:patient_id>/detial', views.view_patient_detail),
-    path('agreementCheck/<int:form_id>/<int:patient_id>/disable', views.agreementDisable),
+    # path('agreementCheck/<int:form_id>/<int:patient_id>/disable', views.agreementDisable),
 
 
     # host to view patient submitted form
@@ -55,5 +55,6 @@ urlpatterns = [
     path('logout', views.logout),
 
     # bad request
-    path('not_found', views.not_found)
+
 ]
+handler404 = "firstTrial.views.page_404_not_found_view"

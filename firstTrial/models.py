@@ -74,11 +74,12 @@ class Patient(models.Model):
     sex = models.CharField(max_length=20)
     date_of_birth = models.DateField(null=False, blank=False, auto_now=True)
     phone_number = models.CharField( max_length=10) 
-    # address = AddressField(on_delete=models.CASCADE)
     insurance = models.CharField(max_length=45)
     insuranceId = models.CharField(max_length=45)
     hearUs = models.CharField(max_length=45)
     referByFriend = models.CharField(max_length=105)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     objects = PatientManager()
 
 

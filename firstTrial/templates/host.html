@@ -13,20 +13,17 @@
     <div class="patient_list">
         <h2>Patient List</h2>
         <h4>Sort by</h4>
-        <a href="/host/sortCaseNumber/Ascending">Case Number↓</a>
-        <a href="/host/sortCaseNumber/Decending">Case Number↑</a>
         <a href="/host">Oldest</a>
         <a href="/host/oldest">Newest</a>
-        <table class="table table-hover hostPortalTable">
+        <table class="table table-hover hostPortalTable" style="text-align:center ;">
             <thead>
                 <tr class="table-primary">
                     <th>Patient Name</th>
-                    <th>Case Number</th>
+                    <th>Register Email</th>
                     <th>Phone Number</th>
-                    <th>Form Submitted Date</th>
-                    <th>AgreementCheck</th>
-                    <th>Diagnosis result</th>
-                    <th></th>
+                    <th>Patient Account Since</th>
+                    <th># of Form Submitted</th>
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -35,8 +32,10 @@
                     <td><a href="/patient/{{patient.id}}/detial">{{patient.firstName}} {{patient.lastName}}</a> </td>
                     <td>{{patient.email}}</td>
                     <td>{{patient.phone_number}}</td>
-                    <td>{{patient.created_at|date:"d/M/Y"}}</td>
+                    <td>{{patient.created_at|date:"M/d/Y"}}</td>
+                    <td>{{patient.patientForm.count}}</td>
                     <td>
+                        <a class="btn btn-outline-success" href="#">Edit</a>
                         <a class="btn btn-outline-danger" href="/patient/{{patient.id}}/delete">Delete</a>
                     </td>
                 </tr>
