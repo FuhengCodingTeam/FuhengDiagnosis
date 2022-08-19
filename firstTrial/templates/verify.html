@@ -4,27 +4,92 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-    <title>Verify Success!</title>
+    <!-- nav bar -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://getbootstrap.com/docs/5.2/assets/css/docs.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- google fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rubik+Distressed&display=swap" rel="stylesheet">
+    <title>See Message</title>
 </head>
 
 <body>
-    <center>
-        <img src="/media/systemPhotos/783c8d73e41a6e43.jpg" height="100px" width="100px" alt="">
+    <center class="dashboard-header">
+        <div class="host-header">
+            <h1>A.I. Diagnosis Control Dashboard</h1>
+        </div>
+        <nav class="small-nav navbar navbar-expand-lg" style="background-color: lightgrey;">
+            <div class="container-fluid" style="justify-content:space-evenly;">
+                <a class="navbar-brand" href="/" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-person-workspace" viewBox="0 0 16 16">
+                            <path d="M4 16s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1H4Zm4-5.95a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z"/>
+                            <path d="M2 1a2 2 0 0 0-2 2v9.5A1.5 1.5 0 0 0 1.5 14h.653a5.373 5.373 0 0 1 1.066-2H1V3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v9h-2.219c.554.654.89 1.373 1.066 2h.653a1.5 1.5 0 0 0 1.5-1.5V3a2 2 0 0 0-2-2H2Z"/>
+                          </svg><br> See Patient Site</a>
+                <a href="/host/login" class="navbar-brand"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-house-door-fill" viewBox="0 0 16 16">
+                    <path d="M6.5 14.5v-3.505c0-.245.25-.495.5-.495h2c.25 0 .5.25.5.5v3.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5z"/>
+                  </svg> <br> Dashboard </a>
+                <a class="navbar-brand" href="/host/newPatient"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-person-plus-fill" viewBox="0 0 16 16">
+                            <path d="M1 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+                            <path fill-rule="evenodd" d="M13.5 5a.5.5 0 0 1 .5.5V7h1.5a.5.5 0 0 1 0 1H14v1.5a.5.5 0 0 1-1 0V8h-1.5a.5.5 0 0 1 0-1H13V5.5a.5.5 0 0 1 .5-.5z"/>
+                          </svg> <br> Add new patient</a>
+                <a class="navbar-brand" href="/host/seepartners"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-people-fill" viewBox="0 0 16 16">
+                    <path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1H7zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+                    <path fill-rule="evenodd" d="M5.216 14A2.238 2.238 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.325 6.325 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1h4.216z"/>
+                    <path d="M4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z"/>
+                  </svg> <br> See Partners</a>
+                <a class="navbar-brand" href="/host/message/new"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-envelope-exclamation-fill" viewBox="0 0 16 16">
+                            <path d="M.05 3.555A2 2 0 0 1 2 2h12a2 2 0 0 1 1.95 1.555L8 8.414.05 3.555ZM0 4.697v7.104l5.803-3.558L0 4.697ZM6.761 8.83l-6.57 4.026A2 2 0 0 0 2 14h6.256A4.493 4.493 0 0 1 8 12.5a4.49 4.49 0 0 1 1.606-3.446l-.367-.225L8 9.586l-1.239-.757ZM16 4.697v4.974A4.491 4.491 0 0 0 12.5 8a4.49 4.49 0 0 0-1.965.45l-.338-.207L16 4.697Z"/>
+                            <path d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Zm.5-5v1.5a.5.5 0 0 1-1 0V11a.5.5 0 0 1 1 0Zm0 3a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0Z"/>
+                          </svg> <br> New Message!</a>
+                <a class="navbar-brand" href="/logout"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-escape" viewBox="0 0 16 16">
+                        <path d="M8.538 1.02a.5.5 0 1 0-.076.998 6 6 0 1 1-6.445 6.444.5.5 0 0 0-.997.076A7 7 0 1 0 8.538 1.02Z"/>
+                        <path d="M7.096 7.828a.5.5 0 0 0 .707-.707L2.707 2.025h2.768a.5.5 0 1 0 0-1H1.5a.5.5 0 0 0-.5.5V5.5a.5.5 0 0 0 1 0V2.732l5.096 5.096Z"/>
+                      </svg> <br> Logout</a>
+            </div>
+        </nav>
     </center>
-    <center>
-        <h2>You have successfully login, but I have deleted everything from this Computer. </h2>
-        <a class="btn btn-outline-danger" href="/logout">
-            <h5>Bye have a good time!</h5>
-        </a>
-    </center>
-    <hr>
-    <p style="color: white;">Notice: </p>
-    <p style="color: white;">If Dalong Zhang is siting next to you, do not change the function of div notice into "display:block". </p>
 
-    <div class="notice" style="display:none">
-        <p>This is a message that previous developer left off. (He does not know anything about coding and Web App, right?)</p>
+    <script>
+        function show() {
+            document.getElementById("popup").style.display = "block";
+        }
+
+        function seeNotice() {
+            var password = document.getElementById("pass").value;
+            if (password == "2020") {
+                document.getElementById("showNotice").style.display = "block";
+                document.getElementById("popup").style.display = "none";
+                document.getElementById("show").style.display = "none";
+            } else {
+                document.getElementById("wrong").style.display = "block";
+            }
+
+        }
+    </script>
+    <center>
+        <h1 style="padding-top:20px;"> Notice: </h1>
+        <div id="show" style="display:block;">
+            <button class="btn btn-danger" onclick="show()">Click to see the text</button>
+        </div>
+    </center>
+    <div id="popup">
+        <h3>Enter Password:</h3>
+        <input id="pass" type="password" />
+        <br>
+        <br>
+        <button class="btn btn-dark" onclick="seeNotice()">Submit</button>
+        <div id="wrong" style="display: none;">
+            <h3 style="padding-top:50px; color:red ;">Invalid password</h3>
+        </div>
+    </div>
+
+
+    <div id="showNotice" class="notice" style="display:none">
+        <h4>This is a message that previous developer left off:</h4>
         <p>The A.I. Diagnosis system is just a <span style="color:red">Joke!</span> Dalong Zhang is using patients' trust to create a fake Diagnosis system that makes patient to believe, this simple Web App can take place of those diagnostic medical devices
             that modern hospital use nowadays to diagnosis patients.
         </p>
@@ -33,11 +98,13 @@
         <p>Although Dalong Zhang did help a lot of patients, I don't believe that there's any difference other than any other Chinese traditional herb medicine doctor outside. Sometimes he seems like he can predict patients' health status, and maybe predict
             their future. However, prediction was not always right and that was how he make thing tricky part, he can always make you believe his prediction is right. No matter the trick looks how true it is, it's a trick. Luckily, there's no one yet
             I knew that getting a bad result, or become worse.</p>
-        <p>Among the thing I have written down, just to make sure myself won't getting any trouble in furture disputes. Again, the APP that I develop, can only be used for <span style="color: red;">demonstrate, displaying, and teching purpose.</span> Any
-            other commercial, business, funding or illegal using will be considered to result in law suit. </p>
-        <p>If you are inherited developer of this APP, please make sure that it's really using the technology of Artificial Intelligence, or whatever to really help diagnosising and helping patients. </p>
-        <p>If you are one of his client, patient, partner, employee, please play smart and mindful. </p>
+        <p>Among the thing I have written down, just to make sure myself won't getting any trouble in furture disputes. Again, the APP that I develop, can only be used for <span style="color: red;">demonstrate, displaying, or edcational purpose.</span> Any
+            other commercial, business, funding or illegal used will be considered to result in law suit. </p>
+        <p>If you are the new developer and want to continusly taking care of this APP, please make sure that it's really using the technology of Artificial Intelligence, or whatever diagnosising technologies to help patients. </p>
+        <p>If you are one of his client, patient, partner, employee, please play smart and be mindful. </p>
     </div>
+
+
 </body>
 
 </html>

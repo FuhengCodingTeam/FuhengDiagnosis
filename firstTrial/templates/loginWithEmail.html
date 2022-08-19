@@ -22,45 +22,69 @@
 
 
 <body>
-    <header class="index2">
-        <h2 style="padding-left: 100px; color: white;"> MAISHEN® A.I. DIAGNOSIS <br><br> 脉神®人工智能诊断系统 </h2>
-        <div class="nav home dark" style="padding-top: 50px; width: 47%; margin-left: -10%;">
+    <header class="index" style="position:absolute ;">
+        <h3>MAISHEN® A.I. DIAGNOSIS <br><br> 脉神®人工智能诊断系统 </h3>
+        <div class="login">
+            <div class="bigscreen">
+                <a style="margin-right: 20px; box-shadow: 5px 10px 5px #ffc10778;" class="col-md-auto btn btn-outline-warning" href="/loginE" style="color: black; text-decoration: none;">Sign In <br> 登录 </a>
+                <a style="color: black; text-decoration: none; box-shadow: 5px 10px 5px #ffc10778;" class="col-md-auto btn btn-warning" href="/register">Sign Up <br> 注册 </a>
+            </div>
+        </div>
+        <div class="desktop-nav">
             <a class="btn" href="/">
-                <h5> Home <br> 主页</h5>
+                <h5>Home<br> 主页</h5>
             </a>
-            <a class="btn" href="#">
-                <h5>Blog <br> 更新</h5>
+            <a class="btn" href="/blog">
+                <h5>Blog<br> 最新消息</h5>
             </a>
-            <a class="btn" href="#">
-                <h5>About Us <br> 关于我们</h5>
+            <a class="btn" href="/aboutus">
+                <h5>About<br> 关于我们</h5>
             </a>
-            <a class="btn" href="#">
-                <h5>How it works <br> 诊断系统</h5>
+            <a class="btn" href="/intro">
+                <h5>System<br> 系统介绍</h5>
             </a>
-            <a class="btn" href="#">
-                <h5>Career <br> 加入我们</h5>
+            <a class="btn" href="/joinus">
+                <h5>Career<br> 加入我们</h5>
             </a>
         </div>
-        <div class="row align-items-center" style="padding-right:100px ;">
-            <a style="margin-right: 20px; box-shadow: 5px 10px 5px #ffc10778; " class="col-md-auto btn btn-outline-warning" href="/loginE" style="color: black; text-decoration: none;">Sign In <br> 登录 </a>
-            <a style="color: black; text-decoration: none; box-shadow: 5px 10px 5px #ffc10778;" class="col-md-auto btn btn-warning" href="/register">Sign Up <br> 注册 </a>
+        <div class="phone-view">
+            <div class="phoneLogin">
+                <a class="btn" href="/loginE">Sign In <br> 登录 </a>
+                <a class="btn" href="/register">Sign Up <br> 注册 </a>
+                <a class="btn" href="/">
+                    Home<br> 主页
+                </a>
+                <a class="btn" href="/blog">
+                    Blog<br> 更新
+                </a>
+                <a class="btn" href="/aboutus">
+                    About<br> 关于
+                </a>
+                <a class="btn" href="/intro">
+                    System<br> 系统
+                </a>
+                <a class="btn" href="/joinus">
+                    Career<br> 加入
+                </a>
+            </div>
         </div>
     </header>
     <div id="large-header" class="large-header">
         <canvas id="demo-canvas"></canvas>
         <!-- <center><img src="" alt=""></center> -->
-        {% if messages %}
-        <center class="messages messageDiv">
-            {% for message in messages %}
-            <h6><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-patch-exclamation-fill" viewBox="0 0 16 16">
-                    <path d="M10.067.87a2.89 2.89 0 0 0-4.134 0l-.622.638-.89-.011a2.89 2.89 0 0 0-2.924 2.924l.01.89-.636.622a2.89 2.89 0 0 0 0 4.134l.637.622-.011.89a2.89 2.89 0 0 0 2.924 2.924l.89-.01.622.636a2.89 2.89 0 0 0 4.134 0l.622-.637.89.011a2.89 2.89 0 0 0 2.924-2.924l-.01-.89.636-.622a2.89 2.89 0 0 0 0-4.134l-.637-.622.011-.89a2.89 2.89 0 0 0-2.924-2.924l-.89.01-.622-.636zM8 4c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995A.905.905 0 0 1 8 4zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
-                </svg> &nbsp;&nbsp;{{ message }}
-            </h6>
-            {% endfor %}
-        </center>
-        {% endif %}
+
         <div class="login-box">
             <h2>Account Login <br> 登录 </h2>
+            {% if messages %}
+            <center class="messages messageDiv">
+                {% for message in messages %}
+                <h6><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-patch-exclamation-fill" viewBox="0 0 16 16">
+                    <path d="M10.067.87a2.89 2.89 0 0 0-4.134 0l-.622.638-.89-.011a2.89 2.89 0 0 0-2.924 2.924l.01.89-.636.622a2.89 2.89 0 0 0 0 4.134l.637.622-.011.89a2.89 2.89 0 0 0 2.924 2.924l.89-.01.622.636a2.89 2.89 0 0 0 4.134 0l.622-.637.89.011a2.89 2.89 0 0 0 2.924-2.924l-.01-.89.636-.622a2.89 2.89 0 0 0 0-4.134l-.637-.622.011-.89a2.89 2.89 0 0 0-2.924-2.924l-.89.01-.622-.636zM8 4c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995A.905.905 0 0 1 8 4zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+                </svg> &nbsp;&nbsp;{{ message }}
+                </h6>
+                {% endfor %}
+            </center>
+            {% endif %}
             <form autocomplete="off" action="/login/email" method="POST">
                 {% csrf_token %}
                 <br>
@@ -87,21 +111,14 @@
                         </button>
                 </center>
                 <center><a class="btn" href="/register">No Account yet? Register <br> 还没有账户？ 点击注册</a></center>
+                <center><a class="btn" href="/resetPassword"> Forgot Password? <br> 重置密码 </a></center>
             </form>
         </div>
-        <center class="loginOption">
-            <a href="/loginP">Forget Email? Try your phone number to login <br> 忘记了电子邮箱？可以尝试用您注册的手机号登录</a>
-            <br>
-            <br>
-            <a href=""> Forgot Password? <br> 重置密码</a>
-        </center>
     </div>
     <script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/1.18.0/TweenMax.min.js"></script>
     <script>
         (function() {
-
             var width, height, largeHeader, canvas, ctx, points, target, animateHeader = true;
-
             // Main
             initHeader();
             initAnimation();
@@ -114,14 +131,10 @@
                     x: width / 2,
                     y: height / 2
                 };
-
-
-
                 canvas = document.getElementById('demo-canvas');
                 canvas.width = width;
                 canvas.height = height;
                 ctx = canvas.getContext('2d');
-
                 // create points
                 points = [];
                 for (var x = 0; x < width; x = x + width / 20) {
@@ -137,7 +150,6 @@
                         points.push(p);
                     }
                 }
-
                 // for each point find the 5 closest points
                 for (var i = 0; i < points.length; i++) {
                     var closest = [];
@@ -167,14 +179,12 @@
                     }
                     p1.closest = closest;
                 }
-
                 // assign a circle to each point
                 for (var i in points) {
                     var c = new Circle(points[i], 2 + Math.random() * 2, 'rgba(255,255,255,0.3)');
                     points[i].circle = c;
                 }
             }
-
             // Event handling
             function addListeners() {
                 if (!('ontouchstart' in window)) {
@@ -308,12 +318,18 @@
         }
     </script>
 
+    <!-- <footer class="large-footer">
+        <h5>COMPANY</h5>
+        <h5>RESOURCES</h5>
+        <h5>FEATURES</h5>
+        <h5>FIND US</h5>
+    </footer>
+    <footer class="phone-footer">
+        <p>COMPANY</p>
+        <p>RESOURCES</p>
+        <p>FEATURES</p>
+        <p>FIND US</p>
+    </footer> -->
 </body>
-<footer>
-    <h5>COMPANY</h5>
-    <h5>RESOURCES</h5>
-    <h5>FEATURES</h5>
-    <h5>FIND US</h5>
-</footer>
 
 </html>

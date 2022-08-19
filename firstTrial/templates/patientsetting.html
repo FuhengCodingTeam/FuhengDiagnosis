@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Your Document</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <!-- nav-bar -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://getbootstrap.com/docs/5.2/assets/css/docs.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+
+<body>
+    <div class="bgc">
+        <div class="mynav">
+            <div class="nav-header">
+                <h3>Mai Shen</h3>
+                <h5 style="padding-top: 20px; color: black; ">Hello {{patient.firstName}} {{patient.lastName}}</h5>
+            </div>
+            <div class="nav-menu">
+                <a class="btn btn-outline-dark" href="/dashboard">My Case <br> 我的诊断</a>
+                <a class="btn btn-outline-dark disabled " style="color: grey; " href=" ">Make an Appointment <br> 预约 (In progress...)</a>
+                <a class="btn btn-outline-dark disabled " style="color: grey; " href=" ">My Bill <br> 账单 (In progress...)</a>
+                <a class="btn btn-outline-dark" href="/dashboard/{{patient.id}}/settings">Setting <br> 设置 </a>
+                <a class="btn btn-outline-dark disabled " style="color: grey; " href=" ">Contact Us <br> 联系我们 (In progress...)</a>
+                <a class="btn btn-outline-dark" href="/">Back to Home <br> 返回主页 </a>
+                <a class="btn btn-outline-dark" href="/logout ">Logout <br> 登出 </a>
+            </div>
+        </div>
+        <div class="dash-content">
+            <nav class="small-nav navbar navbar-expand-lg bg-light ">
+                <div class="container-fluid">
+                    <a class="navbar-brand" href="#">Menu 显示菜单 → </a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                  </button>
+                    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                        <div class="navbar-nav">
+                            <a class="nav-link" href="/dashboard">My Case 我的诊断</a>
+                            <a class="nav-link" href="/dashboard/{{patient.id}}/settings">Setting 设置 </a>
+                            <a class="nav-link" href="/">Back to Home 返回主页 </a>
+                            <a class="nav-link" href="/logout ">Logout 登出 </a>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+            <center>
+                <h2>
+                    MAISHEN® A.I. DIAGNOSIS <br><br> 脉神®人工智能诊断系统
+                </h2>
+                <br>
+                <h3>Edit your info</h3>
+                <hr>
+            </center>
+            <div class="info-display">
+                {% if messages %}
+                <div class="update-messages">
+                    {% for message in messages %}
+                    <p {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</p>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                <div class="info">
+                    <div class="info2" id="patientName">
+                        <h3>Name:</h3>
+                        <p>{{patient.firstName}} {{patient.lastName}}</p>
+                    </div>
+                    <div class="edit">
+                        <button class="btn btn-primary" id="editbtn-name" onclick=editName()>Edit</button>
+                    </div>
+                </div>
+                <div id="editName" class="row align-items-center infoForm" style="display: none;">
+                    <form action="/patient/{{patient.id}}/detail/updateName" method="POST">
+                        {% csrf_token %}
+                        <label class="col col-form-label" for="firstName"><h4>First Name:</h4></label>
+                        <div class="col">
+                            <input class="form-control" type="text" name="firstName" placeholder="{{patient.firstName}}">
+                        </div>
+                        <label class="col col-form-label" for="lastName"><h4>Last Name:</h4></label>
+                        <div class="col">
+                            <input class="form-control" type="text" name="lastName" placeholder="{{patient.lastName}}">
+                        </div>
+                        <br>
+                        <center class="edit-btn">
+                            <button class="btn btn-primary">Submit</button>
+                            <a href="/dashboard/{{patient.id}}/settings" class="btn btn-outline-primary" id="cancelbtn-name" style="display: none; width: 100px; margin-top: 10px;">Cancel</a>
+                        </center>
+                    </form>
+                </div>
+                <script>
+                    function editName() {
+                        document.getElementById("patientName").style.display = "none";
+                        document.getElementById("editName").style.display = "block";
+                        document.getElementById("cancelbtn-name").style.display = "block";
+                        document.getElementById("editbtn-name").style.display = "none";
+
+                    }
+                </script>
+
+                <div class="info">
+                    <div class="info2" id="patientGender">
+                        <h3>Gender: </h3>
+                        <p>{{patient.sex}}</p>
+                    </div>
+                    <div class="edit">
+                        <button class="btn btn-primary" id="editbtn-gender" onclick=editGender()>Edit</button>
+
+                    </div>
+                    <script>
+                        function editGender() {
+                            document.getElementById("patientGender").style.display = "none";
+                            document.getElementById("editGender").style.display = "block";
+                            document.getElementById("cancelbtn-gender").style.display = "block";
+                            document.getElementById("editbtn-gender").style.display = "none";
+                        }
+                    </script>
+                </div>
+                <div id="editGender" class="row align-items-center" style="display: none;">
+                    <form action="/patient/{{patient.id}}/detail/updateGender" method="POST" style="text-align: center;">
+                        {% csrf_token %}
+                        <h4>Gender</h4>
+                        <br>
+                        <input type="radio" class="form-check-input" id="male" name="sex" value="Male" checked="checked">
+                        <label class="check" for="male" class="form-check-label">Male</label>
+                        <input type="radio" class="form-check-input" id="female" name="sex" value="Female">
+                        <label class="check" for="female" class="form-check-label">Female</label>
+                        <center class="edit-btn top10">
+                            <br>
+                            <button class="btn btn-primary">Submit</button>
+                            <a href="/dashboard/{{patient.id}}/settings" class="btn btn-outline-primary" id="cancelbtn-gender" style="display: none; width: 100px; margin-top: 10px;">Cancel</a>
+                        </center>
+                    </form>
+
+                </div>
+                <div class="info">
+                    <div class="info2" id="patientPhone">
+                        <h3>Phone Number:</h3>
+                        <p>{{patient.phone_number}}</p>
+                    </div>
+
+                    <div class="edit">
+                        <button class="btn btn-primary" id="editbtn-phone" onclick=editPhone()>Edit</button>
+                    </div>
+                    <script>
+                        function editPhone() {
+                            document.getElementById("patientPhone").style.display = "none";
+                            document.getElementById("editPhone").style.display = "block";
+                            document.getElementById("cancelbtn-phone").style.display = "block";
+                            document.getElementById("editbtn-phone").style.display = "none";
+                        }
+                    </script>
+                </div>
+
+                <div id="editPhone" style="display: none;" class="row align-items-center">
+                    <form action="/patient/{{patient.id}}/detail/updatePhone" method="POST">
+                        {% csrf_token %}
+                        <label class="col col-form-label" for="phone"><h4>Enter your 10 digit Cell Phone Number</h4></label>
+                        <div class="col">
+                            <input type="tel" class="form-control" id="phone" name="phone" pattern="[0-9]{3}[0-9]{3}[0-9]{4}" placeholder="{{patient.phone_number}}" />
+                            <small>No space or parentheses needed. For example: (408) 123-4567 just enter 4081234567</small>
+                        </div>
+                        <center class="edit-btn top10">
+                            <button class="btn btn-primary">Submit</button>
+                            <a href="/dashboard/{{patient.id}}/settings" class="btn btn-outline-primary" id="cancelbtn-phone" style="display: none; width: 100px; margin-top: 10px;">Cancel</a>
+                        </center>
+                    </form>
+                </div>
+                <div class="info">
+                    <div class="info2" id="patientdob">
+                        <h3>Date of Birth: </h3>
+                        <p>{{patient.date_of_birth}}</p>
+                    </div>
+
+                    <div class="edit">
+                        <button class="btn btn-primary" id="editbtn-dob" onclick=editdob()>Edit</button>
+                    </div>
+                    <script>
+                        function editdob() {
+                            document.getElementById("patientdob").style.display = "none";
+                            document.getElementById("editdob").style.display = "block";
+                            document.getElementById("cancelbtn-dob").style.display = "block";
+                            document.getElementById("editbtn-dob").style.display = "none";
+                        }
+                    </script>
+                </div>
+                <div id="editdob" style="display: none;" class="row align-items-center">
+                    <form action="/patient/{{patient.id}}/detail/updateDob" method="POST" style="text-align: center;">
+                        {% csrf_token %}
+                        <label class="col col-form-label" for="dob"><h4>Date of Birth</h4></label>
+                        <div class="col">
+                            <input style="width: 220px;" type="date" id="dob" name="date_of_birth" placeholder="{{patient.date_of_birth}}">
+                        </div>
+                        <script>
+                            dob.max = new Date().toISOString().split("T")[0];
+                        </script>
+                        <center class="edit-btn top10">
+                            <br>
+                            <button class="btn btn-primary">Submit</button>
+                            <a href="/dashboard/{{patient.id}}/settings" class="btn btn-outline-primary" id="cancelbtn-dob" style="display: none; width: 100px; margin-top: 10px;">Cancel</a>
+                        </center>
+                    </form>
+                </div>
+                <div class="info">
+                    <div class="info2">
+                        <h3>Email: </h3>
+                        <p>{{patient.email}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+</body>
+
+</html>

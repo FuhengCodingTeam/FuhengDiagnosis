@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <script language="javascript" type="text/javascript">
+        function removeSpaces(string) {
+            return string.split(' ').join('');
+        }
+    </script>
+    <title>Reset Password</title>
+</head>
+
+<body>
+    <header class="index" style="position:absolute ;">
+        <h3>MAISHEN® A.I. DIAGNOSIS <br><br> 脉神®人工智能诊断系统 </h3>
+        <div class="login">
+            <div class="bigscreen">
+                <a style="margin-right: 20px; box-shadow: 5px 10px 5px #ffc10778;" class="col-md-auto btn btn-outline-warning" href="/loginE" style="color: black; text-decoration: none;">Sign In <br> 登录 </a>
+                <a style="color: black; text-decoration: none; box-shadow: 5px 10px 5px #ffc10778;" class="col-md-auto btn btn-warning" href="/register">Sign Up <br> 注册 </a>
+            </div>
+        </div>
+        <div class="desktop-nav" style="position:absolute ;">
+            <a class="btn" href="/">
+                <h5>Home<br> 主页</h5>
+            </a>
+            <a class="btn" href="#">
+                <h5>Blog<br> 最新消息</h5>
+            </a>
+            <a class="btn" href="#">
+                <h5>About<br> 关于我们</h5>
+            </a>
+            <a class="btn" href="#">
+                <h5>System<br> 系统介绍</h5>
+            </a>
+            <a class="btn" href="#">
+                <h5>Career<br> 加入我们</h5>
+            </a>
+        </div>
+        <div class="phone-view">
+            <div class="phoneLogin">
+                <a class="btn" href="/loginE">Sign In <br> 登录 </a>
+                <a class="btn" href="/register">Sign Up <br> 注册 </a>
+                <a class="btn" href="/">
+                    Home<br> 主页
+                </a>
+                <a class="btn" href="#">
+                    Blog<br> 更新
+                </a>
+                <a class="btn" href="#">
+                    About<br> 关于
+                </a>
+                <a class="btn" href="#">
+                    System<br> 系统
+                </a>
+                <a class="btn" href="#">
+                    Career<br> 加入
+                </a>
+            </div>
+        </div>
+    </header>
+    <div id="large-header" class="large-header">
+        <canvas id="demo-canvas"></canvas>
+        <div class="reset-p-box">
+            <center>
+                <h4 style="color: white;">Reset your password <br> 重置您的密码 </h4>
+                <form autocomplete="off" action="/reset/password" method="POST">
+                    {% csrf_token %}
+                    <br>
+                    <label class="form-label" style="color: white;" for="oldPassword">Old password</label>
+                    <br>
+                    <br>
+                    <input class="form-control" type="password" name="oldPassword" id="" required>
+                    <br>
+                    <label class="form-label" style="color: white;" for="newPassword">New password</label>
+                    <br>
+                    <br>
+                    <input class="form-control" type="password" name="newPassword" id="" required>
+                    <br>
+                    <label class="form-label" style="color: white;" for="confirmPassword">Confirm your new password</label>
+                    <br>
+                    <br>
+                    <input class="form-control" type="password" name="confirmPassword" id="" required>
+                    <br>
+                    <input type="hidden" name="patient_id" value="{{request.session.patient_id}}" id="">
+                    <button>Submit</button>
+                </form>
+            </center>
+            {% if messages %}
+            <center class="messages messageDiv">
+                {% for message in messages %}
+                <h6><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-patch-exclamation-fill" viewBox="0 0 16 16">
+                    <path d="M10.067.87a2.89 2.89 0 0 0-4.134 0l-.622.638-.89-.011a2.89 2.89 0 0 0-2.924 2.924l.01.89-.636.622a2.89 2.89 0 0 0 0 4.134l.637.622-.011.89a2.89 2.89 0 0 0 2.924 2.924l.89-.01.622.636a2.89 2.89 0 0 0 4.134 0l.622-.637.89.011a2.89 2.89 0 0 0 2.924-2.924l-.01-.89.636-.622a2.89 2.89 0 0 0 0-4.134l-.637-.622.011-.89a2.89 2.89 0 0 0-2.924-2.924l-.89.01-.622-.636zM8 4c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995A.905.905 0 0 1 8 4zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+                </svg> &nbsp;&nbsp;{{ message }}
+                </h6>
+                {% endfor %}
+            </center>
+            {% endif %}
+        </div>
+    </div>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/1.18.0/TweenMax.min.js"></script>
+    <script>
+        (function() {
+
+            var width, height, largeHeader, canvas, ctx, points, target, animateHeader = true;
+
+            // Main
+            initHeader();
+            initAnimation();
+            addListeners();
+
+            function initHeader() {
+                width = window.innerWidth;
+                height = window.innerHeight;
+                target = {
+                    x: width / 2,
+                    y: height / 2
+                };
+
+
+
+                canvas = document.getElementById('demo-canvas');
+                canvas.width = width;
+                canvas.height = height;
+                ctx = canvas.getContext('2d');
+
+                // create points
+                points = [];
+                for (var x = 0; x < width; x = x + width / 20) {
+                    for (var y = 0; y < height; y = y + height / 20) {
+                        var px = x + Math.random() * width / 20;
+                        var py = y + Math.random() * height / 20;
+                        var p = {
+                            x: px,
+                            originX: px,
+                            y: py,
+                            originY: py
+                        };
+                        points.push(p);
+                    }
+                }
+
+                // for each point find the 5 closest points
+                for (var i = 0; i < points.length; i++) {
+                    var closest = [];
+                    var p1 = points[i];
+                    for (var j = 0; j < points.length; j++) {
+                        var p2 = points[j]
+                        if (!(p1 == p2)) {
+                            var placed = false;
+                            for (var k = 0; k < 5; k++) {
+                                if (!placed) {
+                                    if (closest[k] == undefined) {
+                                        closest[k] = p2;
+                                        placed = true;
+                                    }
+                                }
+                            }
+
+                            for (var k = 0; k < 5; k++) {
+                                if (!placed) {
+                                    if (getDistance(p1, p2) < getDistance(p1, closest[k])) {
+                                        closest[k] = p2;
+                                        placed = true;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    p1.closest = closest;
+                }
+
+                // assign a circle to each point
+                for (var i in points) {
+                    var c = new Circle(points[i], 2 + Math.random() * 2, 'rgba(255,255,255,0.3)');
+                    points[i].circle = c;
+                }
+            }
+
+            // Event handling
+            function addListeners() {
+                if (!('ontouchstart' in window)) {
+                    window.addEventListener('mousemove', mouseMove);
+                }
+                window.addEventListener('scroll', scrollCheck);
+                window.addEventListener('resize', resize);
+            }
+
+            function mouseMove(e) {
+                var posx = posy = 0;
+                if (e.pageX || e.pageY) {
+                    posx = e.pageX;
+                    posy = e.pageY;
+                } else if (e.clientX || e.clientY) {
+                    posx = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
+                    posy = e.clientY + document.body.scrollTop + document.documentElement.scrollTop;
+                }
+                target.x = posx;
+                target.y = posy;
+            }
+
+            function scrollCheck() {
+                if (document.body.scrollTop > height) animateHeader = false;
+                else animateHeader = true;
+            }
+
+            function resize() {
+                width = window.innerWidth;
+                height = window.innerHeight;
+                canvas.width = width;
+                canvas.height = height;
+            }
+
+            // animation
+            function initAnimation() {
+                animate();
+                for (var i in points) {
+                    shiftPoint(points[i]);
+                }
+            }
+
+            function animate() {
+                if (animateHeader) {
+                    ctx.clearRect(0, 0, width, height);
+                    for (var i in points) {
+                        // detect points in range
+                        if (Math.abs(getDistance(target, points[i])) < 4000) {
+                            points[i].active = 0.3;
+                            points[i].circle.active = 0.6;
+                        } else if (Math.abs(getDistance(target, points[i])) < 20000) {
+                            points[i].active = 0.1;
+                            points[i].circle.active = 0.3;
+                        } else if (Math.abs(getDistance(target, points[i])) < 40000) {
+                            points[i].active = 0.02;
+                            points[i].circle.active = 0.1;
+                        } else {
+                            points[i].active = 0;
+                            points[i].circle.active = 0;
+                        }
+
+                        drawLines(points[i]);
+                        points[i].circle.draw();
+                    }
+                }
+                requestAnimationFrame(animate);
+            }
+
+            function shiftPoint(p) {
+                TweenLite.to(p, 1 + 1 * Math.random(), {
+                    x: p.originX - 50 + Math.random() * 100,
+                    y: p.originY - 50 + Math.random() * 100,
+                    ease: Circ.easeInOut,
+                    onComplete: function() {
+                        shiftPoint(p);
+                    }
+                });
+            }
+
+            // Canvas manipulation
+            function drawLines(p) {
+                if (!p.active) return;
+                for (var i in p.closest) {
+                    ctx.beginPath();
+                    ctx.moveTo(p.x, p.y);
+                    ctx.lineTo(p.closest[i].x, p.closest[i].y);
+                    ctx.strokeStyle = 'rgba(156,217,249,' + p.active + ')';
+                    ctx.stroke();
+                }
+            }
+
+            function Circle(pos, rad, color) {
+                var _this = this;
+
+                // constructor
+                (function() {
+                    _this.pos = pos || null;
+                    _this.radius = rad || null;
+                    _this.color = color || null;
+                })();
+
+                this.draw = function() {
+                    if (!_this.active) return;
+                    ctx.beginPath();
+                    ctx.arc(_this.pos.x, _this.pos.y, _this.radius, 0, 2 * Math.PI, false);
+                    ctx.fillStyle = 'rgba(156,217,249,' + _this.active + ')';
+                    ctx.fill();
+                };
+            }
+
+            // Util
+            function getDistance(p1, p2) {
+                return Math.pow(p1.x - p2.x, 2) + Math.pow(p1.y - p2.y, 2);
+            }
+
+        })();
+    </script>
+    <script>
+        function submit() {
+            document.getElementById("patientLogin").submit();
+        }
+    </script>
+    <script>
+        function showPassword() {
+            var x = document.getElementById("show_hide_password");
+            if (x.type === "password") {
+                x.type = "text";
+            } else {
+                x.type = "password";
+            }
+        }
+    </script>
+
+    <footer class="large-footer">
+        <h5>COMPANY</h5>
+        <h5>RESOURCES</h5>
+        <h5>FEATURES</h5>
+        <h5>FIND US</h5>
+    </footer>
+    <footer class="phone-footer">
+        <p>COMPANY</p>
+        <p>RESOURCES</p>
+        <p>FEATURES</p>
+        <p>FIND US</p>
+    </footer>
+</body>
+
+</html>

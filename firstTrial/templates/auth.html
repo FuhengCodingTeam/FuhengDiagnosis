@@ -14,12 +14,10 @@
         <form autocomplete="off" action="/submit/developer" method="POST">
             {% csrf_token %}
             <label class="form-label" for="code">
-                <h3>Application is not ready yet</h3>
-                <h5>Employee Only</h5>
+                <h3>Please enter the password</h3>
             </label>
             <hr>
-            <br>
-            <br>
+
             <center>
                 <div class="col-4"><input class="form-control" type="password" id="code" name="code" required></div>
             </center>
@@ -28,8 +26,8 @@
         </form>
     </div>
     {% if not_correct %}
-    <center>
-        <h3>{{not_correct}}</h3>
+    <center style="padding-top:30px ;">
+        <h3 style="color: red ;">{{not_correct}}</h3>
     </center>
 
     {% endif %}
